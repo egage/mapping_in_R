@@ -1,0 +1,22 @@
+---
+title: "Resources"
+---
+
+## Lessons
+
+* [Data Carpentry: **R for Data Analysis and Visualization of Ecological Data**](http://www.datacarpentry.org/R-ecology-lesson/)
+* [**RStudio Webinars**, many topics](https://www.rstudio.com/resources/webinars/)
+* [**Graph Do's and Dont's**](http://stat545.com/block015_graph-dos-donts.html)
+* [**Shiny Interactive R Graph Catalog**](http://shiny.stat.ubc.ca/r-graph-catalog/)
+* [**How to Display Data Badly (recent version)** by Karl Broman](https://www.biostat.wisc.edu/~kbroman/presentations/graphs2017.pdf)
+* [**How to Display Data Badly (old version)** by Karl Broman](https://www.biostat.wisc.edu/~kbroman/presentations/IowaState2013/graphs_combined.pdf)
+
+## Online R/Data Science Books/Courses
+
+* [Jenny Bryan's **Stat545.com**](http://stat545.com/)
+* [Garrett Grolemund and Hadley Wickham's **R For Data Science**](http://r4ds.had.co.nz/)
+* [Kieran Healy's **Data Visualization for Social Science**](http://socviz.co/)
+* [Chester Ismay and Albert Y. Kim's **Modern DiveR**](https://ismayc.github.io/moderndiver-book/)
+* [Julia Silge and David Robinson **Text Mining with R**](http://tidytextmining.com/)
+* [Hadley Wickham's **Advanced R**](http://adv-r.had.co.nz/)
+

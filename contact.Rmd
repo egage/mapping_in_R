@@ -1,0 +1,23 @@
+---
+title: "Contact"
+output:
+  html_document:
+    toc: false
+---
+
+<br>
+
+**Ryan Peek** 
+
+<i class="fa fa-envelope-square" aria-hidden="true"></i> [email](mailto:rapeek@ucdavis.edu)  
+[<i class="fa fa-globe" aria-hidden="true"></i> website](https://ryanpeek.github.io/)  
+[<i class="fa fa-twitter-square" aria-hidden="true"></i> \@riverpeek](https://twitter.com/riverpeek)  
+[<i class="fa fa-github-square" aria-hidden="true"></i> ryanpeek](https://github.com/ryanpeek)  
+[<i class="ai ai-orcid-square"></i> orcid.org/0000-0002-9577-6885](https://orcid.org/0000-0002-9577-6885)   
+
+I am a 4rd year Ph.D. Candidate in Ecology. I study ecological responses to watershed alteration (flow regulation, dams, etc) using conservation genomics to understand historical and current change.
+
+I’ve been using R since 2011, and became a certified Software/Data Carpentry instructor in 2016 and help teach workshops and classes to a wide variety of folks including grad students, post docs, professors, industry researchers, and government scientists. I coordinate the [Davis R Users Group (D-RUG)](http://d-rug.github.io/) and have spearheaded a more organized effort at UC Davis to train fellow ecologists in data science using the R programming language.
+
+My favorite part of teaching R is seeing folks make their first plot or read in their first dataset, and recognizing that programming can be useful and fun. It is an amazing experience learning from teaching and empowering others to become better scientists and data wranglers.  
+

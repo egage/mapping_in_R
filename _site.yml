@@ -1,0 +1,49 @@
+navbar:
+  left:
+    - text: "Home"
+      href: index.html
+      icon: fa-home fa-1x
+    - text: "Mapmaking"
+      href: mapmaking.html
+      icon: fa-map fa-1.5x
+    - text: "Spatial Data"
+      icon: fa-map-marker  fa-1x
+      menu: 
+        - text: "XY Data"
+          href: spatial_XY.html
+        - text: "kml & kmz"
+          href: spatial_kml.html
+        - text: "rasters"
+          href: spatial_rasters.html
+    - text: "Mapping Methods"
+      icon: fa-cog fa-1x
+      menu:
+        - text: "tmap"
+          href: maps_tmap.html
+        - text: "mapview"
+          href: maps_mapview.html
+        - text: "Leaflet"
+          href: maps_leaflet.html
+        - text: "hexbins"
+          href: maps_hexbins.html
+    - text: "Resources"
+      icon: fa-info-circle  fa-1x
+      href: resources.html
+  right:
+    - text: "Contact"
+      icon: fa-hand-spock-o
+      href: contact.html
+    - icon: fa-github fa-lg
+      href: https://github.com/gge-ucd/R-DAVIS
+output_dir: "docs"
+output:
+  html_document:
+    theme: flatly
+    highlight: pygments
+    code_folding: hide
+    toc: true
+    toc_float:
+      collapsed: false
+    include:
+      in_header: header.html
+    css: style.css

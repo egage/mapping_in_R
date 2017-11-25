@@ -1,0 +1,72 @@
+---
+title: ""
+---
+
+# Making `leaflet` maps
+
+You can also create leaflet maps, and they can be shared via html. This is a nice way to provide dynamic spatial data.
+
+Let's look at where there are California snow course stations (check out the [CDEC website](http://cdec.water.ca.gov/snow/current/snow/index.html)). There's a nice package called "**`sharpshooter`**" we can use to pull the locations and metadata for all these stations and plot them with a `leaflet` map.
+
+```{r leafletmap, fig.width=7}
+
+library(sharpshootR)  # CDEC.snow.courses, CDECquery, CDECsnowQuery
+library(leaflet)
+
+# GET DATA AND PREP 
+
+data(CDEC.snow.courses)
+snw<-CDEC.snow.courses
+
+# make a few changes for plotting purposes
+snw$id<-as.factor(snw$id)
+snw$latitude<-as.numeric(snw$latitude)
+snw$longitude<-as.numeric(snw$longitude)*-1
+snw$apr1avg_in<-snw$april.1.Avg.inches
+snw<-dplyr::select(snw, course_number, id, elev_feet:longitude,apr1avg_in)
+str(snw) # check out data
+
+# add color palette
+pal <- colorNumeric(
+  palette = "GnBu",# can change to whatever: "RdBu", "GnBu"
+  domain = snw$apr1avg_in
+)
+
+# Make a leaflet map!
+m <- leaflet() %>% addTiles() %>% 
+  #setView(lng = -120.8, lat = 39, zoom = 8) %>%  
+  addProviderTiles("Esri.WorldImagery", group = "ESRI Aerial") %>%
+  addProviderTiles("Esri.WorldTopoMap", group = "Topo") %>%
+  
+  # add scale bar
+  addMeasure(position = "topright",
+             primaryLengthUnit = "meters",
+             primaryAreaUnit = "sqmeters",
+             activeColor = "#3D535D",
+             completedColor = "#7D4479") %>%
+
+
+# proposed sites
+addCircleMarkers(data=snw, group="CDEC Snow",
+                 lng= ~longitude, lat= ~latitude,
+                 popup=paste0("<strong>","Course ID: ","</strong>", 
+                              snw$course_number, "<br><strong>", "Name: ",
+                              "</strong>", snw$id, "<br><strong>", "Elev (ft): ",
+                              "</strong>", snw$elev_feet, "<br><strong>", 
+                              "Apr-1 Avg: ", "</strong>", snw$apr1avg_in),
+                 stroke=TRUE, weight=0.6,radius=8,
+                 fillOpacity = 0.5, color="black",
+                 #fillColor= ~ifelse(snw$elev_feet>=7500, "skyblue", "yellow")) %>%
+                 fillColor= ~pal(apr1avg_in)) %>%
+
+  # add controls for basemaps and data
+  addLayersControl(
+    baseGroups = c("ESRI Aerial", "Topo"),
+    overlayGroups = c("CDEC Snow"),
+    options = layersControlOptions(collapsed = T))
+
+m
+
+```
+
+

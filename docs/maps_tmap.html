@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="site_libs_extra/academicons-1.8.0/css/academicons.css"/>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home fa-1x"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="mapmaking.html">
+    <span class="fa fa-map fa-1.5x"></span>
+     
+    Mapmaking
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-map-marker  fa-1x"></span>
+     
+    Spatial Data
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="spatial_XY.html">XY Data</a>
+    </li>
+    <li>
+      <a href="spatial_kml.html">kml &amp; kmz</a>
+    </li>
+    <li>
+      <a href="spatial_rasters.html">rasters</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog fa-1x"></span>
+     
+    Mapping Methods
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="maps_tmap.html">tmap</a>
+    </li>
+    <li>
+      <a href="maps_mapview.html">mapview</a>
+    </li>
+    <li>
+      <a href="maps_leaflet.html">Leaflet</a>
+    </li>
+    <li>
+      <a href="maps_hexbins.html">hexbins</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="resources.html">
+    <span class="fa fa-info-circle  fa-1x"></span>
+     
+    Resources
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">
+    <span class="fa fa-hand-spock-o"></span>
+     
+    Contact
+  </a>
+</li>
+<li>
+  <a href="https://github.com/gge-ucd/R-DAVIS">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<p><br></p>
+<div id="using-tmap" class="section level1">
+<h1>Using <code>tmap</code></h1>
+<p>This package provides a useful set of functions for plotting vector (spatial points/polygons) and raster (layer/brick/stack) using a framework similar to <code>ggplot2</code>. A nice overview <a href="https://cran.r-project.org/web/packages/tmap/vignettes/tmap-nutshell.html">vignette</a> walks through these functions.</p>
+<p>This tutorial is just a quick demo of what you can do with <code>tmap</code> using a few different sets of data to show it’s simplicity. See the vignette details.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tmap)
+<span class="kw">data</span>(Europe)
+<span class="kw">qtm</span>(Europe)</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><br></p>
+<div id="some-examples" class="section level2">
+<h2>Some Examples</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tm_shape</span>(Europe) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_polygons</span>(<span class="st">&quot;well_being&quot;</span>, <span class="dt">textNA=</span><span class="st">&quot;Non-European countries&quot;</span>, <span class="dt">title=</span><span class="st">&quot;Well-Being Index&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_text</span>(<span class="st">&quot;iso_a3&quot;</span>, <span class="dt">size=</span><span class="st">&quot;AREA&quot;</span>, <span class="dt">root=</span><span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
+<span class="kw">tm_format_Europe</span>() <span class="op">+</span>
+<span class="kw">tm_style_grey</span>()</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(land, rivers, metro)
+
+<span class="kw">tm_shape</span>(land) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">tm_raster</span>(<span class="st">&quot;trees&quot;</span>, <span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dt">by=</span><span class="dv">20</span>), <span class="dt">legend.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="kw">tm_shape</span>(Europe, <span class="dt">is.master =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_borders</span>() <span class="op">+</span>
+<span class="kw">tm_shape</span>(rivers) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_lines</span>(<span class="dt">lwd=</span><span class="st">&quot;strokelwd&quot;</span>, <span class="dt">scale=</span><span class="dv">5</span>, <span class="dt">legend.lwd.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="kw">tm_shape</span>(metro) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_bubbles</span>(<span class="st">&quot;pop2010&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="dt">border.col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">border.lwd=</span><span class="dv">1</span>, 
+        <span class="dt">size.lim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">11e6</span>), <span class="dt">sizes.legend =</span> <span class="kw">c</span>(<span class="fl">1e6</span>, <span class="fl">2e6</span>, <span class="fl">4e6</span>, <span class="fl">6e6</span>, <span class="fl">10e6</span>), 
+        <span class="dt">title.size=</span><span class="st">&quot;Metropolitan Population&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_text</span>(<span class="st">&quot;name&quot;</span>, <span class="dt">size=</span><span class="st">&quot;pop2010&quot;</span>, <span class="dt">scale=</span><span class="dv">1</span>, <span class="dt">root=</span><span class="dv">4</span>, <span class="dt">size.lowerbound =</span> .<span class="dv">6</span>, 
+        <span class="dt">bg.color=</span><span class="st">&quot;white&quot;</span>, <span class="dt">bg.alpha =</span> .<span class="dv">75</span>, 
+        <span class="dt">auto.placement =</span> <span class="dv">1</span>, <span class="dt">legend.size.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="kw">tm_format_Europe</span>() <span class="op">+</span>
+<span class="kw">tm_style_natural</span>()</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tm_shape</span>(Europe) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_polygons</span>(<span class="st">&quot;well_being&quot;</span>, <span class="dt">title=</span><span class="st">&quot;Well-Being Index&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_facets</span>(<span class="st">&quot;part&quot;</span>, <span class="dt">free.coords=</span><span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="kw">tm_style_grey</span>()</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="global-land-cover" class="section level4">
+<h4>Global Land Cover</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(land)
+<span class="kw">options</span>(<span class="dt">scipen=</span><span class="dv">0</span>)
+<span class="kw">data</span>(World)
+pal8 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#33A02C&quot;</span>, <span class="st">&quot;#B2DF8A&quot;</span>, <span class="st">&quot;#FDBF6F&quot;</span>, <span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#999999&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>, <span class="st">&quot;#E6E6E6&quot;</span>, <span class="st">&quot;#A6CEE3&quot;</span>)
+<span class="kw">tm_shape</span>(land, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">88</span>,<span class="dv">88</span>), <span class="dt">relative=</span><span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_raster</span>(<span class="st">&quot;cover_cls&quot;</span>, <span class="dt">palette =</span> pal8, <span class="dt">title=</span><span class="st">&quot;Global Land Cover&quot;</span>,
+              <span class="dt">legend.hist=</span><span class="ot">TRUE</span>, <span class="dt">legend.hist.z=</span><span class="dv">0</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_shape</span>(World) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_borders</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_format_World</span>(<span class="dt">inner.margins=</span><span class="dv">0</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_legend</span>(<span class="dt">text.size=</span><span class="dv">1</span>,
+            <span class="dt">title.size=</span><span class="fl">1.2</span>,
+            <span class="dt">position =</span> <span class="kw">c</span>(<span class="st">&quot;left&quot;</span>,<span class="st">&quot;bottom&quot;</span>), 
+            <span class="dt">bg.color =</span> <span class="st">&quot;white&quot;</span>, 
+            <span class="dt">bg.alpha=</span>.<span class="dv">2</span>, 
+            <span class="dt">frame=</span><span class="st">&quot;gray50&quot;</span>, 
+            <span class="dt">height=</span>.<span class="dv">6</span>, 
+            <span class="dt">hist.width=</span>.<span class="dv">25</span>,
+            <span class="dt">hist.height=</span>.<span class="dv">2</span>, 
+            <span class="dt">hist.bg.color=</span><span class="st">&quot;gray60&quot;</span>, 
+            <span class="dt">hist.bg.alpha=</span>.<span class="dv">5</span>)</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="old-school-map" class="section level4">
+<h4>Old School Map</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tm_shape</span>(land, <span class="dt">projection=</span><span class="st">&quot;eck4&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">tm_raster</span>(<span class="st">&quot;elevation&quot;</span>, 
+              <span class="dt">breaks=</span><span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="dv">250</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, 
+                       <span class="dv">2500</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="ot">Inf</span>),
+              <span class="dt">palette =</span> <span class="kw">terrain.colors</span>(<span class="dv">9</span>), <span class="dt">title=</span><span class="st">&quot;Elevation&quot;</span>,
+              <span class="dt">auto.palette.mapping=</span><span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_shape</span>(World) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_borders</span>(<span class="st">&quot;grey20&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_grid</span>(<span class="dt">projection=</span><span class="st">&quot;longlat&quot;</span>, <span class="dt">labels.size =</span> .<span class="dv">5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_text</span>(<span class="st">&quot;name&quot;</span>, <span class="dt">size=</span><span class="st">&quot;AREA&quot;</span>,<span class="dt">fontfamily =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_compass</span>(<span class="dt">position =</span> <span class="kw">c</span>(.<span class="dv">65</span>, .<span class="dv">15</span>), <span class="dt">color.light =</span> <span class="st">&quot;grey90&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_credits</span>(<span class="st">&quot;Eckert IV projection&quot;</span>, <span class="dt">position =</span> <span class="kw">c</span>(.<span class="dv">85</span>, <span class="dv">0</span>), <span class="dt">fontfamily =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">tm_style_classic</span>(<span class="dt">inner.margins=</span><span class="kw">c</span>(.<span class="dv">04</span>,.<span class="dv">03</span>, .<span class="dv">02</span>, .<span class="dv">01</span>), <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&quot;left&quot;</span>, <span class="st">&quot;bottom&quot;</span>),
+                   <span class="dt">legend.frame =</span> <span class="ot">TRUE</span>, <span class="dt">bg.color=</span><span class="st">&quot;lightblue&quot;</span>,
+                   <span class="dt">legend.bg.color=</span><span class="st">&quot;lightblue&quot;</span>, 
+                   <span class="dt">earth.boundary =</span> <span class="ot">TRUE</span>, <span class="dt">space.color=</span><span class="st">&quot;grey90&quot;</span>,
+                   <span class="dt">fontfamily =</span> <span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+<p><img src="maps_tmap_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+---
+title: "*Legacy of Landscape Change on Amphibians*"
+date: "*Updated: `r format(Sys.Date())`*"
+output: 
+  html_notebook:
+    toc: yes
+    toc_float: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
+knitr::opts_knit$set(root.dir = normalizePath("../"))
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+# Overview 
+
+Understanding how the legacy of landscape change has impacted a hydrologically sensitive species like *Rana boylii* can help provide insight into how ecological functions may have changed through time. In addition, using genomic data, we can assess the net impact and overall trajectory populations may have taken after landscape changing events occurred. However, in order to do this, we first need to understand the extent and degree of landscape change. 
+
+My analysis will focus on the Sierra Nevada in California, and will assess two major landscape changes, **glaciation** and **gold mining**. I'm largely going to focus on the northern Sierra watersheds, the Feather, Yuba, and American.
+
+# Background {.tabset .tabset-fade .tabset-pills}
+
+## Mining <i class="fa fa-info-circle" aria-hidden="true"></i>
+
+To assess the legacy of mining impacts on frog populations, the main steps I need to follow:
+
+ - Identify location and extent of mined areas across the watershed
+ - Classify the type and degree (intensity) of mining, in simple categorical bins (e.g., `hydraulic-intense = 10+ years`, `hydraulic-moderate = 5-9 years`, `placer-hardrock`, etc.)
+ - Use remote sensing to identify areas based on slope classification? Can we utilize a DEM to identify hydraulically mined areas for areas with a slope greater than X?
+ - Similarly, use a NDWI to identify nearest water and assess water color for potential mining pool areas?
+
+![Dutch Flat Hydraulicking](img/dutchflat_hydrogold.jpg)
+
+A good map (with geological layers, faults, and current/active mines) is available at the CA Dept. of Mines online [here](http://maps.conservation.ca.gov/mol/index.html)
+
+It is difficult to identify the extent of historical hydraulic mining in different watersheds, as data are sparse or lacking entirely. Furthermore, historical maps exist but are inaccurate and generally not orthorectified and digitized, so it is hard to extrapolate where on the landscape these activities occurred. 
+
+One potential option is to download historical maps from sources like USGS's [historical map viewer](http://historicalmaps.arcgis.com/usgs/), orthorectify, and then try to digitize areas in specific watersheds. Ultimately I need to categorize the landscape so I can bin my samples into groups.
+
+An alternative would be to approximate where the maximal extent of hydraulicking could have ocurred (basd on topo elevation lines, gradient, snowline, etc), and assume anything above the line was not hydraulicked, and everything below was (or was affected significantly). 
+
+One of the larger questions amidst all this is if frogs were uniformly extirpated and recolonized (including upstream into non-hydraulicked areas), or if some populations in the upper parts of the watershed escaped, and then moved downstream to recolonize? There were likely a few populations in lower elevation areas that escaped destruction, but it seems limited and hard to pinpoint given the data and amount of material that was removed/washed.
+
+See "A Practical Treatise on Hydraulic Mining in California" by Augustus Jesse Bowie, 1883.
+
+## Glaciation <i class="fa fa-info-circle" aria-hidden="true"></i>
+
+A great resource on glaciation of the west is this [website](http://glaciers.us/Downloads). Ultimately I'm most interested in the historical extent of glaciers during the last last glacial maximum (LGM), approx. 25k years ago, and how that may have shaped the biogeography of *Rana* in the west/Sierra Nevada.
+
+The glacial record on the eastern side of the Sierra Nevada range includes eight named Pleistocene glaciations and stadials: *McGee*, *Sherwin*, *Casa Diablo*, *Mono Basin*, *Tahoe*, *Tenaya*, *Tioga* and *RecessPeak*, as well as the *Neoglacial Matthes* (Little Ice Age) advance (all in order of decreasing age) (Gillespie and Zehfuss 2004).
+
+Age control of the *Tioga* glaciation is available from radiocarbon dating of sediment cores collected from bogs and lakes. Clark et al. (2003) cored Grass Lake Bog, south of Lake Tahoe,and dated a sharp transition from Tioga glacial to underlying non-glacial sediments at **21,130--19,850 cal yr B.P**. This date maybe the best estimate for the beginning of the Tioga maximum advance. Tioga began to retreat as early as 15,000 yr ago, James et al. (2002) showed the Tioga glaciers retreated rapidly from the middle elevations of the Yuba River **15,000--14,000** yr ago.
+
+For a good description along with maps of the ice sheets through time, see [Dyke 2004](http://www.sciencedirect.com/science/article/pii/S1571086604802094?via%3Dihub), and associated github [repo](https://github.com/awickert/North-American-Ice-Sheets) for more info on getting shapefiles of the layers from the paper.
+
+## Map <i class="fa fa-map-o" aria-hidden="true"></i>
+
+This map shows the maximal glacial extent approximately 18 calendar *ka BP* ago, from [Dyke 2004](http://www.sciencedirect.com/science/article/pii/S1571086604802094), hydraulic mining pits of California ([Orlando 2016](https://www.sciencebase.gov/catalog/item/571976c2e4b071321fe22947)), mining point locations from the Dept. of Mines. 
+
+```{r leafletGlaciers, eval=TRUE, echo=FALSE, message=FALSE}
+
+suppressPackageStartupMessages({
+  library(sf)
+  library(leaflet)
+  library(tidyverse)
+  library(htmltools)
+})
+
+# load glacier data
+h8 <- st_read("data/shps/hydrology/HUC8_named_westcoast.shp", quiet = T)
+glacExtent <- st_read("data/shps/glacial_extent_18kaBP/glacial_extent_18kaBP.shp", quiet = T)
+minesall <- st_read("data/shps/Mines_CA/Mines_CA.shp", quiet = T)
+minepits <- st_read("data/shps/Hydraulic_Mine_Pits_of_California/Hydraulic_Mine_Pits_of_California.shp", quiet=T)
+#dams <- st_read("data_output/shps/CA_OR_dams/CA_OR_dams.shp")
+
+frogs<- read_csv("data_output/rapture04_metadata_hucs_nhd_quant.csv")
+
+# need to convert/reproject to global mercator for mapping: EPSG:3857, lat long: 4326
+glacExtent <- st_transform(glacExtent, crs = 4326)
+h8 <- st_transform(h8, crs = 4326)
+minesall <- st_transform(minesall, crs=4326)
+minepits <- st_transform(minepits, crs=4326)
+
+# MAP
+glacMAP<-leaflet(width = "100%", height="100%") %>%
+  addTiles() %>% 
+  setView(lng = -120.8, lat = 39, zoom = 5) %>%  # set to Auburn/Colfax, zoom 5 for CA 
+  addProviderTiles("Stamen.TopOSMFeatures", group = "OSM Features") %>%
+  addProviderTiles("Esri.WorldTopoMap", group = "Topo") %>%
+  addProviderTiles("Esri.WorldImagery", group = "ESRI Aerial") %>%
+
+  # huc8
+  addPolygons(data=h8, group="HUC8", color="darkblue", weight = 1.3,
+              fillColor = "transparent", label = ~HU_8_NAME) %>% 
+  
+  # hydraulic mines
+  addPolygons(data=minepits, group="Mine Pits", color="#8B4513", fillColor="#CD661D",
+              stroke=TRUE, weight = 1.7, fillOpacity = 0.65,
+              popup=paste0("Pit Name: ", minepits$Pit_Name, "<br>",
+                           "Data Source: ", minepits$DataSource,"<br>",
+                           "Area (ac): ", minepits$AreaAcres)) %>%
+  # glacial extent 
+  addPolygons(data=glacExtent, group="Glacial Extent 18ka BP", color="darkslategrey",
+              stroke=TRUE, weight = 1.7, fillColor = "darkslategrey",
+              popup=paste0("ICE18k: ", glacExtent$ICE18K_,"<br>",
+                           "ICE18k_ID: ", glacExtent$ICE18K_ID)) %>%
+  
+  # add scale bar
+  addMeasure(position = "topright",
+             primaryLengthUnit = "meters",
+             primaryAreaUnit = "sqmeters",
+             activeColor = "#3D535D",
+             completedColor = "#7D4479") %>% 
+  
+  # all mines
+  addCircleMarkers(data=minesall, group="CA Mines", 
+                   stroke=TRUE, weight=0.3,radius=4,
+                   fillOpacity = 0.7,
+                   fillColor = "orange",
+                   popup=paste0("Site: ", minesall$site_name,"<br>",
+                                "Type: ", minesall$oper_type,
+                                "<br>", "Main Ore: ", minesall$commod1),
+                   clusterOptions = markerClusterOptions(),
+                   clusterId = "minesCluster") %>%
+  hideGroup("CA Mines") %>% 
+  
+  # add freeze cluster option
+  addEasyButton(easyButton(
+    states = list(
+      easyButtonState(
+        stateName="unfrozen-markers",
+        icon="ion-toggle",
+        title="Freeze Clusters",
+        onClick = JS("
+          function(btn, map) {
+            var clusterManager =
+              map.layerManager.getLayer('cluster', 'minesCluster');
+            clusterManager.freezeAtZoom();
+            btn.state('frozen-markers');
+          }")
+      ),
+      easyButtonState(
+        stateName="frozen-markers",
+        icon="ion-toggle-filled",
+        title="UnFreeze Clusters",
+        onClick = JS("
+          function(btn, map) {
+            var clusterManager =
+              map.layerManager.getLayer('cluster', 'minesCluster');
+            clusterManager.unfreeze();
+            btn.state('unfrozen-markers');
+          }")
+      )
+    )
+  )) %>% 
+  
+  addEasyButton(easyButton(
+    icon="fa-globe", title="Zoom to Level 5",
+    onClick=JS("function(btn, map){ map.setZoom(5); }"))) %>%
+  # add RANA samples
+  addCircleMarkers(data=frogs, group="Rana Samples",
+                   lng = ~lon, lat=~lat,opacity = 0.5,
+                   popup=paste0("Locality: ", frogs$Locality, "<br>",
+                                "HUC12: ", frogs$HUC_12, 
+                                "<br>","SampleID: ",frogs$SampleID,
+                                "<br>", "SPP_ID: ",frogs$SPP_ID,
+                                "<br>", "Elev (m): ", frogs$elev_m, "<br>",
+                                "StreamName: ", frogs$GNIS_NAME),
+                   weight=0.6,radius=10, stroke=TRUE,
+                   fillColor = ifelse(frogs$SPP_ID=="RABO" | frogs$SPP_pc1=="RABO", "yellow", "dodgerblue")) %>%
+  hideGroup("Peek Samples") %>% 
+  
+  addLayersControl(
+    baseGroups = c("Topo","ESRI Aerial", "OSM Features"),
+    overlayGroups = c("HUC8", "Glacial Extent 18ka BP", "Mine Pits", "CA Mines", "Rana Samples"),
+    options = layersControlOptions(collapsed = T))
+
+glacMAP
+
+
+```
+
+
+

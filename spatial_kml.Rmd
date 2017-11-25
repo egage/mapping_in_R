@@ -1,0 +1,68 @@
+---
+title: ""
+---
+
+<br>
+
+# Working with `kml` Files
+
+`kml` files are the unzipped versions of `kmz` files. You can use the `sf` package to read `kml`'s. You'll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo.
+
+```{r eval=T, echo=T}
+
+suppressPackageStartupMessages({
+  library(tidyverse);
+  library(sf);
+  library(stringi)
+  })
+
+gages <- st_read("data/streamgages_06.kml") # reads kml but not kmz?
+
+# pull out relevant info (remove html tags)
+gages$name <- gsub(pattern="<.*?>", "", gages$Name)
+gages$details <- gsub(pattern="<.*?>", "", gages$Description)
+gages$site_no <- substr(gages$name, start = 1, stop = 8)
+gages$site <- substr(gages$name, start = 10, stop = nchar(gages$name))
+gages$date_s <- substr(gages$details, start=13, stop=22)
+gages$date_e <- substr(gages$details, start=32, stop=nchar(gages$details)-1)
+
+gages <- gages %>% dplyr::select(site_no:date_e)
+gages$gageID <- paste0("T", gages$site_no)
+
+# grep all sites with AMERICAN?
+gages_AMER <- filter(gages, grepl(pattern = "AMERICAN|YUBA|BEAR",site))
+
+# simple map
+ggplot() +
+  labs(x="Longitude (WGS84)", y="Latitude",
+       title="USGS Gages in CA") + 
+  geom_sf(data=gages, col="blue", lwd=0.4, pch=21) +
+  theme_bw(base_family = "Roboto Condensed")
+
+# now with background
+library(ggmap)
+
+location<-c(mean(st_coordinates(gages_AMER)[,1]),
+            mean(st_coordinates(gages_AMER)[,2]))
+
+map1 <- get_map(location=location,crop = F,
+                color="bw",
+                maptype="terrain",
+                source="google",
+                zoom=8)
+
+terrain_bg <-ggmap(map1)
+ 
+terrain_bg +
+  scale_color_viridis_d() +
+  labs(x="Longitude (WGS84)", y="Latitude",
+       title="Selected USGS Gages with American | Yuba | Bear In Name") + 
+  theme_bw(base_family = "Roboto Condensed") +
+  geom_point(data=gages_AMER, 
+             aes(x = st_coordinates(gages_AMER)[,1],
+                 y = st_coordinates(gages_AMER)[,2]),
+             fill="dodgerblue", alpha=0.8, pch=21, size=3)+
+  coord_fixed(ratio=1.3)
+
+```
+

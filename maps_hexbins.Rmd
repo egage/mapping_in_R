@@ -1,0 +1,71 @@
+---
+title: ""
+---
+
+# Mapping with hexbins
+
+Using hexagons can be a useful tool for mapping US state data. A gist by @hrbrmstr gave a nice demo [here](https://gist.github.com/hrbrmstr/4efedf3b24f7da4e24d1), and the original `geojson` file used for mapping state data is [here](https://team.cartodb.com/u/andrew/tables/andrew.us_states_hexgrid/public/map)
+
+The code below adapts that code and data.
+
+*Track down where this file came from and what blog??*
+
+```{r hexstatebins, eval=T, echo=T}
+
+# Load packages
+suppressPackageStartupMessages({
+  library(rgdal);
+  library(dplyr);
+  library(ggplot2);
+  library(maptools);
+  library(rgeos);
+  library(sp);
+  library(viridis)
+})
+
+# load some state data
+load(file = "data/state_DF.RData")
+
+# load data 
+us <- readOGR("data/us_states_hexgrid.geojson", "OGRGeoJSON")
+ogrInfo("data/us_states_hexgrid.geojson", "OGRGeoJSON")
+
+# add XY for centroid to use for labels
+centers <- cbind.data.frame(data.frame(gCentroid(us, byid=TRUE), id=us@data$iso3166_2))
+
+# join w state data:
+us<-merge(us, stateDF, by.x="iso3166_2", by.y="state.abb")
+us_map <- ggplot2::fortify(model = us, region="iso3166_2")
+
+# Plot Hex US Map
+gg <- ggplot() + geom_map(data=us_map, map=us_map,
+                          aes(x=long, y=lat, map_id=id),
+                          color="white",fill="#ffffff", size=0.5) +
+  # this is the white outline
+  geom_map(data=us@data, map=us_map,
+           aes(map_id=iso3166_2),
+           fill="#ffffff", alpha=0, color="white",
+           show.legend = FALSE)+
+  # this is the fill (mean number of days with min temperature below freezing (1931–1960) in capital or large city)
+  geom_map(data=us@data, map=us_map,
+           aes(fill=Frost, map_id=iso3166_2))+
+  coord_map() + scale_fill_viridis() + 
+  # the state label for each
+  geom_text(data=centers, aes(label=id, x=x, y=y), color="white",
+            size=4, show.legend = F) + 
+  theme_bw(base_family = "Roboto Condensed") + labs(title="Mean # Days with Frost in State Capital  (1931-1960)", x=NULL, y=NULL) +
+  theme(panel.border=element_blank(),
+        panel.grid=element_blank(), 
+        axis.ticks=element_blank(),
+        axis.text=element_blank())
+
+gg
+
+
+# save it!
+#ggsave(filename = "./imgs/hexUS_Map.png", dpi = 200)
+
+```
+
+
+
