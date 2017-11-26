@@ -1,0 +1,146 @@
+---
+title: ""
+---
+
+<br>
+
+# Line and Polygon Data with `rgdal` and `sf`
+
+There are loads of spatial mapping/plotting packages in R. The main two ways to read in spatial data use the `rgdal` package, and the `sf` package. Let's look at how to load/plot line and polygon data.
+
+**Let's load packages first:**
+
+```{r load libs, warning=FALSE}
+suppressPackageStartupMessages({
+  library(rgdal); # spatial/shp reading
+  library(tidyverse); # wrangling data/plotting
+  library(viridis); # nice color palette
+  library(sf); # newer "simple features" spatial package
+  library(USAboundaries); # state/county data
+  library(Imap); # nice mapping/color functions
+  library(ggrepel) # for labeling
+  }) 
+
+```
+
+## Get Line/Polyline Data
+
+For this example, let's use some [Hydroshed](http://www.hydrosheds.org/) Data.
+
+I've downloaded rivers for CA and OR and put them [here]() on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
+
+### Load shapefiles with `rgdal`
+
+Let's load a polyline or line shapefile of rivers of California and Oregon. The result is a `SpatialLinesDataFrame` in your R environment.
+
+```{r shapesRGDAL, echo=T, eval=T}
+
+# we can use ogrInfo to see CRS, attributes, etc.
+ogrInfo(dsn="./data", layer="rivs_CA_OR_hydroshed") # see shapefile info
+
+# then read in the shapefile
+rivers_sp<- readOGR(dsn = "data", layer = "rivs_CA_OR_hydroshed")
+
+proj4string(rivers_sp) # check projection, should be WGS84
+
+```
+
+### Load shapefiles with `sf`
+
+Here's how to do the same thing using the `sf` package. Notice two important differences, the `sf` package reads things in as a regular dataframe, with the spatial component of the data contained inside a `geometry` **list-column** within the dataframe. That means you can operate on this data as you would any data frame. The other main difference, is that reading shape data in is much faster with `sf`.  
+
+```{r shapes_sf, echo=T, eval=T}
+
+# notice the similar function structure, but results in dataframe
+rivers_sf <- st_read(dsn = "./data", layer="rivs_CA_OR_hydroshed") 
+
+# check crs
+st_crs(rivers_sf)
+
+```
+
+### Download State/County Data
+
+A nice package for pulling county/state data is the `USAboundaries` package. Importantly, this package pulls these data in as `sf` features (`dataframes`), not as `rgdal` or `SpatialPolygonDataFrames` data.
+
+Let's show this in two steps, the first is how to grab a `sf` feature for a given state or states.
+
+```{r getStateData, echo=T, eval=T}
+
+# Pick a State
+state_names <- c("california")
+
+# Download STATE data and add projection
+CA<-us_states(resolution = "high", states = state_names) %>%
+  st_transform(crs = 4326)
+
+```
+
+That was easy...what about counties? We can use the same type of call, but let's add some `dplyr` and `purrr` functionality here to add the X and Y values for the centroid of each polygon (county) we pull. In this case we use `map_dbl` because it will take a vector or values (the `geometry` col here), map a function over each row in that vector, and return a vector of values (the centroid points).
+
+```{r getCountiesData, echo=T, eval=T}
+# Pick some CA counties
+co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Plumas")
+
+# get COUNTY data for a given state
+counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use list of state(s) here
+  filter(name %in% co_names) %>% # filter to just the counties we want
+  mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), # add centroid values for labels
+         lat=map_dbl(geometry, ~st_centroid(.x)[[2]])) # add centroid values for labels
+
+# get range of lat/longs from counties for mapping
+mapRange1 <- c(range(st_coordinates(counties_spec)[,1]),range(st_coordinates(counties_spec)[,2]))
+```
+
+## Make some Maps!
+
+### Base `plot` and `sf`
+
+```{r plot_sf, eval=T, echo=T}
+
+plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.7), cex=1.5)
+text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name)
+graphics::title("Selected CA Counties",
+      family="Roboto Condensed")
+
+```
+
+### `ggplot2` and `sf`
+
+First let's take a look at the county/State map. Since these data are all data.frames (`sf` features), we can use the `geom_sf` function in the most recent version of `ggplot2`. I'm showing what happens by limiting the map range, vs. without the `coord_sf` call.
+
+```{r ggplot_map1}
+
+ggplot() + 
+  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
+  geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
+  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
+  theme_bw()
+
+# with cropped range (to only our selected counties)
+ggplot() + 
+  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
+  geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
+  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
+  coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
+  theme_bw()
+
+```
+
+
+## Put it All Together
+
+```{r makeMap, echo=T, eval=F}
+
+# does this work?
+
+# with cropped range (to only our selected counties)
+ggplot() + 
+  #geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
+  geom_sf(data=rivers_sf, col="darkblue", lwd=0.6) +
+  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
+  #coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
+  theme_bw()
+
+```
+

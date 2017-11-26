@@ -11,6 +11,8 @@ navbar:
       menu: 
         - text: "XY Data"
           href: spatial_XY.html
+        - text: "Polyline & Polygons"
+          href: spatial_linepoly.html
         - text: "kml & kmz"
           href: spatial_kml.html
         - text: "rasters"
