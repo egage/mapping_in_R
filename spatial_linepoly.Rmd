@@ -27,7 +27,7 @@ suppressPackageStartupMessages({
 
 For this example, let's use some [Hydroshed](http://www.hydrosheds.org/) Data.
 
-I've downloaded rivers for CA and OR and put them [here]() on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
+I've downloaded rivers for CA and OR and put them [here](https://github.com/ryanpeek/mapping_in_R/blob/master/data/rivs_CA_OR_hydroshed.zip) on github. Download the zipped file and unzip it in a `data` folder. We're going to use *`shapefiles`* for the remainder of this example. 
 
 ### Load shapefiles with `rgdal`
 

@@ -2,20 +2,28 @@
 title: "Resources"
 ---
 
-## Lessons
+## Spatial Analysis in R
 
-* [Data Carpentry: **R for Data Analysis and Visualization of Ecological Data**](http://www.datacarpentry.org/R-ecology-lesson/)
-* [**RStudio Webinars**, many topics](https://www.rstudio.com/resources/webinars/)
+* [**Intro to Spatial R**](https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf)
+* [**Spatial.ly blog**](http://spatial.ly/)
+* [**`rgdal` based tutorial** by Jeff Hollister](http://jwhollister.com/iale_open_science/2015/07/05/03-Spatial-Data-In-R/)
+* [**Making GeoJSON from shapefiles**](https://blog.exploratory.io/creating-geojson-out-of-shapefile-in-r-40bc0005857d)
+
+## Data Visualization
+
+* [Kieran Healy's **Data Visualization for Social Science**](http://socviz.co/)
 * [**Graph Do's and Dont's**](http://stat545.com/block015_graph-dos-donts.html)
 * [**Shiny Interactive R Graph Catalog**](http://shiny.stat.ubc.ca/r-graph-catalog/)
 * [**How to Display Data Badly (recent version)** by Karl Broman](https://www.biostat.wisc.edu/~kbroman/presentations/graphs2017.pdf)
 * [**How to Display Data Badly (old version)** by Karl Broman](https://www.biostat.wisc.edu/~kbroman/presentations/IowaState2013/graphs_combined.pdf)
 
-## Online R/Data Science Books/Courses
 
-* [Jenny Bryan's **Stat545.com**](http://stat545.com/)
+## General R/Data Science Resources
+
 * [Garrett Grolemund and Hadley Wickham's **R For Data Science**](http://r4ds.had.co.nz/)
-* [Kieran Healy's **Data Visualization for Social Science**](http://socviz.co/)
+* [Jenny Bryan's **Stat545.com**](http://stat545.com/)
+* [**RStudio Webinars**, many topics](https://www.rstudio.com/resources/webinars/)
+* [Data Carpentry: **R for Data Analysis and Visualization of Ecological Data**](http://www.datacarpentry.org/R-ecology-lesson/)
 * [Chester Ismay and Albert Y. Kim's **Modern DiveR**](https://ismayc.github.io/moderndiver-book/)
 * [Julia Silge and David Robinson **Text Mining with R**](http://tidytextmining.com/)
 * [Hadley Wickham's **Advanced R**](http://adv-r.had.co.nz/)

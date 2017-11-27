@@ -402,6 +402,38 @@ div.tocify {
 </div>
 </div>
 </div>
+<div id="projections-and-coordinate-reference-systems-crs" class="section level2">
+<h2>Projections and Coordinate Reference Systems (CRS)</h2>
+<p>If you aren’t sure what the difference between projected (PCS) and geographic coordinate systems (GCS) are, here’s a (<em>very simplified</em>) summary. A few very helpful websites are:</p>
+<ul>
+<li><a href="http://epsg.io/" class="uri">http://epsg.io/</a></li>
+<li><a href="http://spatialreference.org" class="uri">http://spatialreference.org</a></li>
+</ul>
+<div id="gcs-geographic-coordinate-system" class="section level3">
+<h3>GCS (Geographic Coordinate System)</h3>
+<p><strong>GCS</strong> are based on spherical earth models (3-dimensional), and therefore use spherical coordinate systems (e.g., latitude and longitude), or <code>datum</code>, in a 3-dimensional space to define locations based on a <code>spheroid</code>/<code>ellipsoid</code> model (of which there are many). The <code>datum</code> is used to link the spheroid model to the earth’s surface. Calculating distances along this model utilizes geodesic or Great Circles. A few common GCS:</p>
+<ul>
+<li><strong>NAD83 [4269]</strong>: <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><strong>NAD27 [4267]</strong>: <code>ellipsoid</code> = <em>Clarke 1866</em>, <code>datum</code> = <em>North American Datum 1927</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+</ul>
+</div>
+<div id="pcs-projected-coordinate-systems" class="section level3">
+<h3>PCS (Projected Coordinate Systems)</h3>
+<p>PCS project locations onto a 2-dimensional Cartesian coordinate plane. That’s why we refer to these as <strong>map</strong> projections, because they help flatten the 3d spheroid onto a flat plane, which is good for displaying maps. Different projections have different ways of stretching the 3-d earth’s surface onto a flat 2-d plane. By putting things onto a flat 2-d surface, calculations and analysis can be calculated on a <em>grid</em>, versus with geodesic (Great Circles). It’s possible to do great circle calculations with a PCS, these are sometimes referred to as <code>geodetic</code> calculations. So, these are basically GCS <strong>projected</strong> onto a flat surface…so they have the GCS components, plus a “projection” component. Some common PCS:</p>
+<ul>
+<li><strong>WGS84 [4326]</strong>: <code>ellipsoid</code> = <em>WGS 1984</em>, <code>datum</code> = <em>World Geodetic System 1984</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><strong>NAD83/Albers [EPSG: 3310]</strong>: <code>geodetic CRS</code>= <em>NAD83(NSRS2007)</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983 (National Spatial Reference System 2007)</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><strong>NAD83(NSRS2007/UTM Zone 10N) [EPSG: 3717]</strong>: <code>geodetic CRS</code>= <em>NAD83</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><strong>NAD83(2011)/Conus Albers [EPSG: 6350]</strong>: <code>geodetic CRS</code>= <em>NAD83(2011)</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><strong>NAD83/California Zone 4 (ftUS) [EPSG: 2228]</strong>: <code>geodetic CRS</code>= <em>NAD83</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>US survey foot</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+</ul>
+<p>Overwhelmed? It’s okay…one step at a time!</p>
+<div class="figure">
+<img src="https://media.giphy.com/media/Nqzq2ULB3Xbqg/giphy.gif" alt="Overwhelmed!?" />
+<p class="caption">Overwhelmed!?</p>
+</div>
+</div>
+</div>
 
 
 
