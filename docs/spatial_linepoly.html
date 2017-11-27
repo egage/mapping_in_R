@@ -439,8 +439,8 @@ div.tocify {
   <span class="kw">library</span>(Imap); <span class="co"># nice mapping/color functions</span>
   <span class="kw">library</span>(ggrepel) <span class="co"># for labeling</span>
   }) </code></pre></div>
-<div id="get-linepolyline-data" class="section level2">
-<h2>Get Line/Polyline Data</h2>
+<div id="linepolyline-shapefile-data" class="section level2">
+<h2>Line/Polyline Shapefile Data</h2>
 <p>For this example, let’s use some <a href="http://www.hydrosheds.org/">Hydroshed</a> Data.</p>
 <p>I’ve downloaded rivers for CA and OR and put them <a href="">here</a> on github. Download the zipped file and unzip it in a <code>data</code> folder. We’re going to use <em><code>shapefiles</code></em> for the remainder of this example.</p>
 <div id="load-shapefiles-with-rgdal" class="section level3">
@@ -509,6 +509,10 @@ rivers_sf &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span cl
 ##   EPSG: 4326 
 ##   proj4string: &quot;+proj=longlat +datum=WGS84 +no_defs&quot;</code></pre>
 </div>
+</div>
+<div id="polygon-shapefile-data" class="section level2">
+<h2>Polygon Shapefile Data</h2>
+<p>No different here, process is the same. But let’s take a look at a package that might be helpful for folks working with state/county boundaries.</p>
 <div id="download-statecounty-data" class="section level3">
 <h3>Download State/County Data</h3>
 <p>A nice package for pulling county/state data is the <code>USAboundaries</code> package. Importantly, this package pulls these data in as <code>sf</code> features (<code>dataframes</code>), not as <code>rgdal</code> or <code>SpatialPolygonDataFrames</code> data.</p>
@@ -535,18 +539,71 @@ mapRange1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="k
 </div>
 <div id="make-some-maps" class="section level2">
 <h2>Make some Maps!</h2>
-<div id="base-plot-and-sf" class="section level3">
-<h3>Base <code>plot</code> and <code>sf</code></h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)
+<p>First let’s show a few examples comparing how to plot with the <code>rgdal</code> rivers dataset vs. the <code>sf</code> version.</p>
+<div id="base-rgdal-vs.-sf" class="section level3">
+<h3>Base: <code>rgdal</code> vs. <code>sf</code></h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">plot</span>(rivers_sp, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
+<span class="kw">title</span>(<span class="st">&quot;with sp&quot;</span>)
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_sf), <span class="dt">col=</span><span class="st">&quot;darkblue&quot;</span>)
+<span class="kw">title</span>(<span class="st">&quot;with sf&quot;</span>)</code></pre></div>
+<p><img src="spatial_linepoly_files/figure-html/rgdal_base-1.png" width="672" /></p>
+<p>Pretty much the same deal.</p>
+</div>
+</div>
+<div id="advanced-mapping" class="section level2">
+<h2>Advanced Mapping</h2>
+<p>Okay, let’s add in the county/state data, and figure out a few tricks to making our map a bit cleaner.</p>
+<div id="layering-maps-plot-and-sf" class="section level3">
+<h3>Layering Maps: <code>plot</code> and <code>sf</code></h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) <span class="co"># reset to default</span>
+
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_sf), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">add=</span>T)
 <span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name)
 graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
       <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/plot_sf-1.png" width="672" /></p>
+<p>Unforunately this map isn’t very good. How can we improve it? Seems it would be nicer to crop the river layer to the counties of interest, or at least center things on that area. Also might be nice to have the labels on top and not obscured by the rivers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get range of lat/longs from counties for mapping</span>
+mapRange1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">range</span>(<span class="kw">st_coordinates</span>(counties_spec)[,<span class="dv">1</span>]),<span class="kw">range</span>(<span class="kw">st_coordinates</span>(counties_spec)[,<span class="dv">2</span>]))
+
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_sf), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>),
+     <span class="dt">xlim=</span>mapRange1[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">ylim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>)],<span class="dt">axes=</span>T)
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>), <span class="dt">cex=</span><span class="fl">1.5</span>, <span class="dt">add=</span>T)
+<span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name,
+     <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;white&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>), <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
+      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+<p><img src="spatial_linepoly_files/figure-html/relayering-1.png" width="672" /></p>
+<p>That’s a little better…but still not quite what we want. Lots of extra ink going toward stuff that we don’t need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?</p>
+</div>
+<div id="cropping-with-sf" class="section level3">
+<h3>Cropping with <code>sf</code></h3>
+<p>Great thing is that <code>sf</code> has some really nice tools for this, just as any GIS program would. Here let’s use <code>st_intersection</code> to crop our river layer to only rivers in the counties of interest.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rivers_crop &lt;-<span class="st"> </span><span class="kw">st_intersection</span>(rivers_sf, counties_spec)</code></pre></div>
+<pre><code>## although coordinates are longitude/latitude, st_intersection assumes that they are planar</code></pre>
+<pre><code>## Warning: attribute variables are assumed to be spatially constant
+## throughout all geometries</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_crop)) <span class="co"># a quick plot check to make sure it worked</span></code></pre></div>
+<p><img src="spatial_linepoly_files/figure-html/crop_sf-1.png" width="672" /></p>
+<p>Great, let’s try our plot again.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># try again, let&#39;s switch layer ordering</span>
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.2</span>), <span class="dt">cex=</span><span class="fl">1.5</span>, <span class="dt">axes=</span>T)
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_crop), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>),<span class="dt">add=</span>T)
+<span class="kw">plot</span>(<span class="kw">st_geometry</span>(CA), <span class="dt">add=</span>T, <span class="dt">lwd=</span><span class="dv">2</span>)
+<span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name,
+     <span class="dt">col=</span><span class="st">&quot;maroon&quot;</span>, <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
+      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+<p><img src="spatial_linepoly_files/figure-html/cropRelayer-1.png" width="672" /></p>
+<p>Ok! Not bad. What can we improve?</p>
 </div>
 <div id="ggplot2-and-sf" class="section level3">
 <h3><code>ggplot2</code> and <code>sf</code></h3>
-<p>First let’s take a look at the county/State map. Since these data are all data.frames (<code>sf</code> features), we can use the <code>geom_sf</code> function in the most recent version of <code>ggplot2</code>. I’m showing what happens by limiting the map range, vs. without the <code>coord_sf</code> call.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
+<p>Mapping with ggplot2 brings some extra things we can fiddle with. Since these data are all data.frames (<code>sf</code> features), we can use the <code>geom_sf</code> function in the most recent version of <code>ggplot2</code>. I’m showing what happens by limiting the map range, vs. without the <code>coord_sf</code> call.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># not cropped</span>
+<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>CA, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">fill=</span><span class="ot">NA</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>counties_spec, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">show.legend =</span> F, <span class="dt">color=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>counties_spec, <span class="kw">aes</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">label=</span>name)) <span class="op">+</span>
@@ -556,23 +613,22 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 <span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>CA, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">fill=</span><span class="ot">NA</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>counties_spec, <span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">show.legend =</span> F, <span class="dt">color=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>rivers_crop, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">size=</span><span class="fl">0.5</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>counties_spec, <span class="kw">aes</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">label=</span>name)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">ylim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>)]) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Selected CA Counties and Riverlines&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/ggplot_map1-2.png" width="672" /></p>
 </div>
 </div>
 <div id="put-it-all-together" class="section level2">
 <h2>Put it All Together</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># does this work?</span>
-
-<span class="co"># with cropped range (to only our selected counties)</span>
-<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="co">#geom_sf(data=counties_spec, fill = NA, show.legend = F, color=&quot;gray50&quot;, lwd=0.4) +</span>
-<span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>rivers_sf, <span class="dt">col=</span><span class="st">&quot;darkblue&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.6</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>CA, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">fill=</span><span class="ot">NA</span>) <span class="op">+</span>
-<span class="st">  </span><span class="co">#coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<ul>
+<li>Can you crop to a single county and plot the rivers and county?</li>
+<li>How might you make an inset in your map? (hint…see <a href="https://ryanpeek.github.io/2016-09-28-static_maps_in_R/">here</a>)</li>
+<li>What about buffering outside of the selected counties by 30 km?</li>
+<li>Can you add some points? Try adding a point at <strong>39.4 N and 121.0 W</strong>.</li>
+</ul>
 </div>
 </div>
 

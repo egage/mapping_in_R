@@ -1,0 +1,40 @@
+---
+title: "notes_miscellaneous"
+author: "Ryan Peek"
+date: "11/26/2017"
+output: html_document
+---
+
+
+From here: http://mbontrager.org/blog/2016/08/01/Maps-in-R
+
+## Adding Rivers and Lakes
+
+Check out [Natural Earth Data Rivers](http://www.naturalearthdata.com/), Lake Centerlines data.
+
+```{r, eval=F, echo=T}
+library(sf)
+
+# Download Natural Earth Data rivers file and read shape file
+fileName <- "http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_rivers_lake_centerlines.zip"
+temp <- tempfile()
+download.file(fileName, temp, mode="wb")
+unzip(temp)
+data <- st_read("ne_50m_rivers_lake_centerlines.shp")
+unlink(c(temp, "ne_*"))
+
+# test plot
+plot(st_geometry(data))
+
+
+```
+
+
+
+## Scale bar on ggplot2
+
+see [here](http://egallic.fr/scale-bar-and-north-arrow-on-a-ggplot2-map/)
+
+### other stuff
+
+http://eriqande.github.io/rep-res-web/lectures/making-maps-with-R.html

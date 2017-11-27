@@ -23,7 +23,7 @@ suppressPackageStartupMessages({
 
 ```
 
-## Get Line/Polyline Data
+## Line/Polyline Shapefile Data
 
 For this example, let's use some [Hydroshed](http://www.hydrosheds.org/) Data.
 
@@ -58,6 +58,10 @@ rivers_sf <- st_read(dsn = "./data", layer="rivs_CA_OR_hydroshed")
 st_crs(rivers_sf)
 
 ```
+
+## Polygon Shapefile Data
+
+No different here, process is the same. But let's take a look at a package that might be helpful for folks working with state/county boundaries.
 
 ### Download State/County Data
 
@@ -94,23 +98,91 @@ mapRange1 <- c(range(st_coordinates(counties_spec)[,1]),range(st_coordinates(cou
 
 ## Make some Maps!
 
-### Base `plot` and `sf`
+First let's show a few examples comparing how to plot with the `rgdal` rivers dataset vs. the `sf` version. 
+
+### Base: `rgdal` vs. `sf`
+
+```{r rgdal_base, echo=T, eval=T}
+
+par(mfrow=c(1,2))
+plot(rivers_sp, col="blue")
+title("with sp")
+plot(st_geometry(rivers_sf), col="darkblue")
+title("with sf")
+
+```
+
+Pretty much the same deal. 
+
+## Advanced Mapping
+
+Okay, let's add in the county/state data, and figure out a few tricks to making our map a bit cleaner.
+
+### Layering Maps: `plot` and `sf`
 
 ```{r plot_sf, eval=T, echo=T}
+par(mfrow=c(1,1)) # reset to default
 
-plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.7), cex=1.5)
+plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.5), cex=1.5)
+plot(st_geometry(rivers_sf), col=adjustcolor("blue", alpha=0.7), add=T)
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name)
 graphics::title("Selected CA Counties",
       family="Roboto Condensed")
 
 ```
 
+Unforunately this map isn't very good. How can we improve it? Seems it would be nicer to crop the river layer to the counties of interest, or at least center things on that area. Also might be nice to have the labels on top and not obscured by the rivers.
+
+```{r relayering}
+
+# get range of lat/longs from counties for mapping
+mapRange1 <- c(range(st_coordinates(counties_spec)[,1]),range(st_coordinates(counties_spec)[,2]))
+
+plot(st_geometry(rivers_sf), col=adjustcolor("blue", alpha=0.7),
+     xlim=mapRange1[c(1:2)], ylim = mapRange1[c(3:4)],axes=T)
+plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.5), cex=1.5, add=T)
+text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
+     col=adjustcolor("white", alpha=0.8), font = 2, family="Roboto Condensed")
+graphics::title("Selected CA Counties",
+      family="Roboto Condensed")
+```
+
+That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?
+
+### Cropping with `sf`
+
+Great thing is that `sf` has some really nice tools for this, just as any GIS program would.  Here let's use `st_intersection` to crop our river layer to only rivers in the counties of interest.
+
+```{r crop_sf}
+
+rivers_crop <- st_intersection(rivers_sf, counties_spec)
+plot(st_geometry(rivers_crop)) # a quick plot check to make sure it worked
+
+```
+
+Great, let's try our plot again.
+
+```{r cropRelayer}
+
+# try again, let's switch layer ordering
+plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.2), cex=1.5, axes=T)
+plot(st_geometry(rivers_crop), col=adjustcolor("blue", alpha=0.7),add=T)
+plot(st_geometry(CA), add=T, lwd=2)
+text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
+     col="maroon", font = 2, family="Roboto Condensed")
+graphics::title("Selected CA Counties",
+      family="Roboto Condensed")
+```
+
+Ok! Not bad. What can we improve?
+
 ### `ggplot2` and `sf`
 
-First let's take a look at the county/State map. Since these data are all data.frames (`sf` features), we can use the `geom_sf` function in the most recent version of `ggplot2`. I'm showing what happens by limiting the map range, vs. without the `coord_sf` call.
+Mapping with ggplot2 brings some extra things we can fiddle with. Since these data are all data.frames (`sf` features), we can use the `geom_sf` function in the most recent version of `ggplot2`. I'm showing what happens by limiting the map range, vs. without the `coord_sf` call.
 
 ```{r ggplot_map1}
 
+# not cropped
 ggplot() + 
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
   geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
@@ -121,26 +193,17 @@ ggplot() +
 ggplot() + 
   geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
   geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
+  geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5)+
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
   coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
-  theme_bw()
+  theme_bw(base_family = "Roboto Condensed") +
+  labs(title="Selected CA Counties and Riverlines")
 
 ```
-
 
 ## Put it All Together
 
-```{r makeMap, echo=T, eval=F}
-
-# does this work?
-
-# with cropped range (to only our selected counties)
-ggplot() + 
-  #geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4) +
-  geom_sf(data=rivers_sf, col="darkblue", lwd=0.6) +
-  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA) +
-  #coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
-  theme_bw()
-
-```
-
+ - Can you crop to a single county and plot the rivers and county? 
+ - How might you make an inset in your map? (hint...see [here](https://ryanpeek.github.io/2016-09-28-static_maps_in_R/))
+ - What about buffering outside of the selected counties by 30 km?
+ - Can you add some points? Try adding a point at **39.4 N and 121.0 W**.
