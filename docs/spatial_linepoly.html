@@ -399,7 +399,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/gge-ucd/R-DAVIS">
+  <a href="https://github.com/ryanpeek/mapping_in_R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -561,8 +561,7 @@ mapRange1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="k
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_sf), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">add=</span>T)
 <span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name)
-graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
-      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/plot_sf-1.png" width="672" /></p>
 <p>Unforunately this map isn’t very good. How can we improve it? Seems it would be nicer to crop the river layer to the counties of interest, or at least center things on that area. Also might be nice to have the labels on top and not obscured by the rivers.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get range of lat/longs from counties for mapping</span>
@@ -572,9 +571,8 @@ mapRange1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="k
      <span class="dt">xlim=</span>mapRange1[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">ylim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>)],<span class="dt">axes=</span>T)
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(counties_spec), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>), <span class="dt">cex=</span><span class="fl">1.5</span>, <span class="dt">add=</span>T)
 <span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name,
-     <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;white&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>), <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)
-graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
-      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+     <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;white&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>), <span class="dt">font =</span> <span class="dv">2</span>)
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/relayering-1.png" width="672" /></p>
 <p>That’s a little better…but still not quite what we want. Lots of extra ink going toward stuff that we don’t need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?</p>
 </div>
@@ -593,9 +591,8 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_crop), <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>),<span class="dt">add=</span>T)
 <span class="kw">plot</span>(<span class="kw">st_geometry</span>(CA), <span class="dt">add=</span>T, <span class="dt">lwd=</span><span class="dv">2</span>)
 <span class="kw">text</span>(counties_spec<span class="op">$</span>lon, counties_spec<span class="op">$</span>lat, <span class="dt">labels =</span> counties_spec<span class="op">$</span>name,
-     <span class="dt">col=</span><span class="st">&quot;maroon&quot;</span>, <span class="dt">font =</span> <span class="dv">2</span>, <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)
-graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>,
-      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+     <span class="dt">col=</span><span class="st">&quot;maroon&quot;</span>, <span class="dt">font =</span> <span class="dv">2</span>)
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Selected CA Counties&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/cropRelayer-1.png" width="672" /></p>
 <p>Ok! Not bad. What can we improve?</p>
 </div>
@@ -616,7 +613,7 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>rivers_crop, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">size=</span><span class="fl">0.5</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>counties_spec, <span class="kw">aes</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">label=</span>name)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">ylim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>)]) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Selected CA Counties and Riverlines&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/ggplot_map1-2.png" width="672" /></p>
 </div>

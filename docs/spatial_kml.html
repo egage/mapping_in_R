@@ -399,7 +399,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/gge-ucd/R-DAVIS">
+  <a href="https://github.com/ryanpeek/mapping_in_R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -428,9 +428,11 @@ div.tocify {
 <p><br></p>
 <div id="working-with-kml-files" class="section level1">
 <h1>Working with <code>kml</code> Files</h1>
-<p><code>kml</code> files are the unzipped versions of <code>kmz</code> files. You can use the <code>sf</code> package to read <code>kml</code>’s. You’ll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo.</p>
+<p><code>kml</code> files are the unzipped versions of <code>kmz</code> files. You can use the <code>sf</code> package to read <code>kml</code>’s. You’ll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo <a href="https://github.com/ryanpeek/mapping_in_R/blob/master/data/streamgages_06.kml">here</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
-  <span class="kw">library</span>(tidyverse);
+  <span class="kw">library</span>(ggplot2)
+  <span class="kw">library</span>(dplyr)
+  <span class="co">#devtools::install_github(&quot;tidyverse/ggplot2&quot;, force=TRUE)</span>
   <span class="kw">library</span>(sf);
   <span class="kw">library</span>(stringi)
   })

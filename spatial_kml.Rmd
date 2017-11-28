@@ -6,12 +6,14 @@ title: ""
 
 # Working with `kml` Files
 
-`kml` files are the unzipped versions of `kmz` files. You can use the `sf` package to read `kml`'s. You'll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo.
+`kml` files are the unzipped versions of `kmz` files. You can use the `sf` package to read `kml`'s. You'll want to unzip with any sort of zip package you have on your computer (Keka, 7zip, etc.). Data used in this example live in the github repo [here](https://github.com/ryanpeek/mapping_in_R/blob/master/data/streamgages_06.kml).
 
 ```{r eval=T, echo=T}
 
 suppressPackageStartupMessages({
-  library(tidyverse);
+  library(ggplot2)
+  library(dplyr)
+  #devtools::install_github("tidyverse/ggplot2", force=TRUE)
   library(sf);
   library(stringi)
   })

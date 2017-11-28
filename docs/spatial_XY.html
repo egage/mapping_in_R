@@ -399,7 +399,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="https://github.com/gge-ucd/R-DAVIS">
+  <a href="https://github.com/ryanpeek/mapping_in_R">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -442,13 +442,27 @@ div.tocify {
 <div id="get-xy-data-ca-hotsprings" class="section level2">
 <h2>Get XY Data: CA Hotsprings</h2>
 <p>The simplest type of data to plot is X/Y points. You might have a <code>.csv</code> lying around with site locations, or even better, a shapefile. For now let’s show how to get some data and use it with the packages disussed above. Scraping data from the web requires a table of some sort, and for this example, we’ll use a Chrome browser (but same idea applies for other browsers).</p>
-<p>Let’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’m going to use a method I demonstrated in a blog I wrote a few weeks ago (<em><a href="https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/">check it out here</a></em>) which shows how to use a package called <code>rvest</code> to pretty quickly and easily grab data from any part of a webpage. Let’s see how it works.</p>
+<p>Let’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’ve already downloaded the file (see optional section below for directions), so you can just read the file link directly into R as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>)</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   State = col_character(),
+##   Lat = col_double(),
+##   Lon = col_double(),
+##   Spring_Name = col_character(),
+##   Temp_C = col_integer(),
+##   Temp_F = col_integer(),
+##   Area = col_character(),
+##   USGS_Quad = col_character()
+## )</code></pre>
+<div id="optional-webscraping-the-table" class="section level4">
+<h4>Optional: WebScraping the Table</h4>
+<p>I’m going to use a method I demonstrated in a blog I wrote a few weeks ago (<em><a href="https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/">check it out here</a></em>) which shows how to use a package called <code>rvest</code> to pretty quickly and easily grab data from any part of a webpage. Let’s see how it works.</p>
 <ul>
 <li>First we need to go the webpage, and then right click and select <em><strong>Inspect</strong></em>. I’m using Chrome as my browser here.</li>
 <li>Then in the upper right hand box, hover/scroll around until the table part of the webpage is highlighted. Right click on that line and select “<strong>Copy</strong> &gt; <strong>Copy Xpath</strong>”.</li>
 <li>Read in with the code below!</li>
 </ul>
-<p>Once we have that in the global environment we can fix it up however we need.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
 
 url &lt;-<span class="st"> &quot;http://www.hotspringsenthusiast.com/California.asp&quot;</span>
@@ -477,11 +491,12 @@ df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><spa
 <img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" alt="sean" />
 <p class="caption">sean</p>
 </div>
+</div>
 <div id="make-xy-spatial-rgdal" class="section level3">
 <h3>Make XY “Spatial”: <code>rgdal</code></h3>
 <p>Now we have some data, let’s show how to read it in as spatial data using the <code>rgdal</code> pipeline. This requires creating a <code>SpatialPointsDataFrame</code>. We’ll use the extension <code>sp</code> for data of this type.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in data</span>
-df_locs &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/hotsprings_CA.csv&quot;</span>) 
+df_locs &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>) <span class="co"># or as file:  data/hotsprings_CA.csv</span>
 
 <span class="kw">head</span>(df_locs) <span class="co"># wait...what&#39;s up with Lon?</span></code></pre></div>
 <pre><code>##   State    Lat     Lon                           Spring_Name Temp_C Temp_F
@@ -601,12 +616,12 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 location=<span class="kw">c</span>(<span class="op">-</span><span class="fl">119.7</span>,<span class="fl">38.7</span>) <span class="co"># set the center of the map</span>
 
 <span class="co"># set the background map up</span>
-map1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location,<span class="dt">crop =</span> F,
+map1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location, <span class="dt">crop =</span> F,
              <span class="dt">color=</span><span class="st">&quot;bw&quot;</span>,
-             <span class="dt">maptype=</span><span class="st">&quot;terrain&quot;</span>,
+             <span class="dt">maptype=</span><span class="st">&quot;satellite&quot;</span>,
              <span class="dt">source=</span><span class="st">&quot;google&quot;</span>,
              <span class="dt">zoom=</span><span class="dv">8</span>)</code></pre></div>
-<pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.7,-119.7&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;sensor=false</code></pre>
+<pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.7,-119.7&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=satellite&amp;language=en-EN&amp;sensor=false</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sitemap &lt;-<span class="st"> </span><span class="kw">ggmap</span>(map1) <span class="co"># start a ggmap... like calling ggplot()</span>
 
 <span class="co"># and let&#39;s make our nicemap</span>

@@ -78,6 +78,8 @@ state_names <- c("california")
 CA<-us_states(resolution = "high", states = state_names) %>%
   st_transform(crs = 4326)
 
+
+
 ```
 
 That was easy...what about counties? We can use the same type of call, but let's add some `dplyr` and `purrr` functionality here to add the X and Y values for the centroid of each polygon (county) we pull. In this case we use `map_dbl` because it will take a vector or values (the `geometry` col here), map a function over each row in that vector, and return a vector of values (the centroid points).
@@ -126,8 +128,7 @@ par(mfrow=c(1,1)) # reset to default
 plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.5), cex=1.5)
 plot(st_geometry(rivers_sf), col=adjustcolor("blue", alpha=0.7), add=T)
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name)
-graphics::title("Selected CA Counties",
-      family="Roboto Condensed")
+graphics::title("Selected CA Counties")
 
 ```
 
@@ -142,9 +143,8 @@ plot(st_geometry(rivers_sf), col=adjustcolor("blue", alpha=0.7),
      xlim=mapRange1[c(1:2)], ylim = mapRange1[c(3:4)],axes=T)
 plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.5), cex=1.5, add=T)
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
-     col=adjustcolor("white", alpha=0.8), font = 2, family="Roboto Condensed")
-graphics::title("Selected CA Counties",
-      family="Roboto Condensed")
+     col=adjustcolor("white", alpha=0.8), font = 2)
+graphics::title("Selected CA Counties")
 ```
 
 That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?
@@ -156,6 +156,7 @@ Great thing is that `sf` has some really nice tools for this, just as any GIS pr
 ```{r crop_sf}
 
 rivers_crop <- st_intersection(rivers_sf, counties_spec)
+
 plot(st_geometry(rivers_crop)) # a quick plot check to make sure it worked
 
 ```
@@ -169,9 +170,8 @@ plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.2), cex=1.5, 
 plot(st_geometry(rivers_crop), col=adjustcolor("blue", alpha=0.7),add=T)
 plot(st_geometry(CA), add=T, lwd=2)
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
-     col="maroon", font = 2, family="Roboto Condensed")
-graphics::title("Selected CA Counties",
-      family="Roboto Condensed")
+     col="maroon", font = 2)
+graphics::title("Selected CA Counties")
 ```
 
 Ok! Not bad. What can we improve?
@@ -196,7 +196,7 @@ ggplot() +
   geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5)+
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
   coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
-  theme_bw(base_family = "Roboto Condensed") +
+  theme_bw() +
   labs(title="Selected CA Counties and Riverlines")
 
 ```

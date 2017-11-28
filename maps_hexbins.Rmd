@@ -67,5 +67,30 @@ gg
 
 ```
 
+```{r statebins, echo=F, eval=T}
+#example 2:
+
+#devtools::install_github("hrbrmstr/statebins", force=TRUE)
+library(statebins)
+
+g <- cdcfluview::ili_weekly_activity_indicators(2017)
+
+ggplot(g[g$weeknumber==46,])+
+  geom_statebins(aes(state=statename, fill=activity_level)) + 
+  viridis::scale_fill_viridis(name="2017-11-18 Flu Activity", direction=-1,
+                              breaks=c(0:10)) + 
+  theme_bw()
+  #theme_statebins(legend_position="top")
+
+
+
+library(voteogram)
+
+roll_call("house", 115, 1, 1) %>% 
+  house_carto(pp_square=TRUE) + 
+  coord_equal() +
+  labs(title="115th / House / Session 1 / Vote 1") +
+  theme_voteogram()
+```
 
 
