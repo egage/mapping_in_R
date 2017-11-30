@@ -11,7 +11,7 @@
 
 
 
-<title>Mapmaking</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -28,6 +28,52 @@
 <link rel="stylesheet" href="site_libs_extra/academicons-1.8.0/css/academicons.css"/>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -378,61 +424,102 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Mapmaking</h1>
 
 </div>
 
 
-<p><br></p>
-<div id="all-maps-are-not-created-equally" class="section level2">
-<h2>All Maps are Not Created Equally</h2>
-<p><br></p>
-<p><strong><em>Good maps make a difference!</em></strong></p>
-<p><img src="figs/moat-far-side.png" width="500"/></p>
-<p><br></p>
-<p>While there many ways to make a map, ultimately it would seem there should only be one way to interpret a map. A map cut through confusion and clarify where things are in space (or time). If a map is effective, a reader shouldn’t need too much time to observe the information the map is trying to portray.</p>
-<p>Maps can be very effective <strong>and</strong> beautiful! They do not need to be one or the other. Good visualizations often simplify to the pieces (landscapes, points of interest, temporal change) of interest, and remove any other distractions.</p>
-<div id="keep-things-simple" class="section level3">
-<h3>Keep Things Simple!</h3>
-<p>Maps don’t need to have every single layer or detail. They need <strong>the relevant details</strong>, so anyone can quickly take a look at the map, orient themselves, and extract the important information.</p>
-<p>This animation (created by Darkhorse Analytics, and used in Jenny Bryan’s excellent <a href="http://stat545.com/block015_graph-dos-donts.html">stat545</a> course) shows how <em>simplification</em> can make a big difference in communication. Granted, this is for figures, and not specifically for maps, but the point is the same.</p>
-<div class="figure">
-<img src="figs/less-is-more-darkhorse-analytics.gif" />
-
-</div>
-<p><br></p>
-</div>
-</div>
-<div id="projections-and-coordinate-reference-systems-crs" class="section level2">
-<h2>Projections and Coordinate Reference Systems (CRS)</h2>
-<p>This is often one of the hardest and most complicated parts about working with spatial data. This is a (<em>very simplified</em>) summary of the difference between projected (PCS) and geographic coordinate systems (GCS). A few helpful websites to check/identify Proj4 strings or EPSG codes:</p>
+<div id="using-the-sf-package" class="section level1">
+<h1>Using the <code>sf</code> Package</h1>
+<p>This package is great and I’ve already shown a good bit on how to read files in, plot, crop data, etc.</p>
+<p>This is meant to link to the existing vignettes, and walk through a few more of the features/functions that <code>sf</code> provides. It’s really pretty amazing.</p>
+<div id="existing-vignettes" class="section level2">
+<h2>Existing vignettes:</h2>
+<p>There are some great <a href="https://cran.r-project.org/web/packages/sf/index.html">vignettes available for <code>sf</code></a>. I’d start by looking though <a href="https://cran.r-project.org/web/packages/sf/vignettes/sf1.html"><strong>1</strong></a> &amp; <a href="https://cran.r-project.org/web/packages/sf/vignettes/sf2.html"><strong>2</strong></a>.</p>
+<div id="sf-functions" class="section level3">
+<h3><strong><code>sf</code></strong> Functions</h3>
+<p>I think one thing to keep in mind is the <code>sf</code> objects are dataframes…but some functions will return vectors or matrices based on the data. Here’s a quick comparison of which returns what:</p>
+<p><strong>RETURNS NEW GEOMETRY (so <code>data.frame</code>)</strong></p>
 <ul>
-<li><a href="http://epsg.io/" class="uri">http://epsg.io/</a></li>
-<li><a href="http://spatialreference.org" class="uri">http://spatialreference.org</a></li>
+<li><code>st_buffer</code></li>
+<li><code>st_boundary</code></li>
+<li><code>st_convexhull</code></li>
+<li><code>st_union_cascaded</code></li>
+<li><code>st_simplify</code></li>
+<li><code>st_triangulate</code></li>
+<li><code>st_polygonize</code></li>
+<li><code>st_centroid</code></li>
+<li><code>st_segmentize</code></li>
+<li><code>st_union</code></li>
 </ul>
-<p>One way to think about projections is they represent different types of tableclothes that get stretched over a 3-dimensional globe. If you are working with locations on the tablecloth, the accuracy of your measurements will be higher than if you are near the edges or off the tablecloth and somewhere else on the globe.</p>
-<div id="gcs-geographic-coordinate-system" class="section level3">
-<h3>GCS (Geographic Coordinate System)</h3>
-<p><strong>GCS</strong> are based on spherical earth models (3-dimensional), and therefore use spherical coordinate systems (e.g., latitude and longitude), or <code>datum</code>, in a 3-dimensional space to define locations based on a <code>spheroid</code>/<code>ellipsoid</code> model (of which there are many). The <code>datum</code> is used to link the spheroid model to the earth’s surface. Calculating distances along this model utilizes geodesic or Great Circles. A few common GCS:</p>
+<p><strong>RETURNS index or logical Matrix</strong></p>
 <ul>
-<li><strong>NAD83 [4269]</strong>: <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-<li><strong>NAD27 [4267]</strong>: <code>ellipsoid</code> = <em>Clarke 1866</em>, <code>datum</code> = <em>North American Datum 1927</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
+<li><code>st_intersects</code></li>
+<li><code>st_disjoint</code></li>
+<li><code>st_touches</code></li>
+<li><code>st_crosses</code></li>
+<li><code>st_within</code></li>
+<li><code>st_contains</code></li>
+<li><code>st_overlaps</code></li>
+<li><code>st_equals</code></li>
+<li><code>st_covers</code></li>
+<li><code>st_covered_by</code></li>
+<li><code>st_equals_exact</code></li>
+<li><code>st_is_within_distance</code></li>
 </ul>
 </div>
-<div id="pcs-projected-coordinate-systems" class="section level3">
-<h3>PCS (Projected Coordinate Systems)</h3>
-<p>PCS project locations onto a 2-dimensional Cartesian coordinate plane. That’s why we refer to these as <strong>map</strong> projections, because they help flatten the 3d spheroid onto a flat plane, which is good for displaying maps. Different projections have different ways of stretching the 3-d earth’s surface onto a flat 2-d plane. By putting things onto a flat 2-d surface, calculations and analysis can be calculated on a <em>grid</em>, versus with geodesic (Great Circles). It’s possible to do great circle calculations with a PCS, these are sometimes referred to as <code>geodetic</code> calculations. So, these are basically GCS <strong>projected</strong> onto a flat surface…so they have the GCS components, plus a “projection” component. Some common PCS:</p>
-<ul>
-<li><strong>WGS84 [4326]</strong>: <code>ellipsoid</code> = <em>WGS 1984</em>, <code>datum</code> = <em>World Geodetic System 1984</em>, <code>unit</code> = <em>Degree</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-<li><strong>NAD83/Albers [EPSG: 3310]</strong>: <code>geodetic CRS</code>= <em>NAD83(NSRS2007)</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983 (National Spatial Reference System 2007)</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-<li><strong>NAD83(NSRS2007/UTM Zone 10N) [EPSG: 3717]</strong>: <code>geodetic CRS</code>= <em>NAD83</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-<li><strong>NAD83(2011)/Conus Albers [EPSG: 6350]</strong>: <code>geodetic CRS</code>= <em>NAD83(2011)</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>meter</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-<li><strong>NAD83/California Zone 4 (ftUS) [EPSG: 2228]</strong>: <code>geodetic CRS</code>= <em>NAD83</em>, <code>ellipsoid</code> = <em>GRS 1980</em>, <code>datum</code> = <em>North American Datum 1983</em>, <code>unit</code> = <em>US survey foot</em>, <code>prime meridian</code> = <code>Greenwich</code>)</li>
-</ul>
-<p>Overwhelmed? It’s okay…one step at a time!</p>
-<div class="figure">
-<img src="https://media.giphy.com/media/Nqzq2ULB3Xbqg/giphy.gif" alt="Overwhelmed!?" />
-<p class="caption">Overwhelmed!?</p>
+</div>
+<div id="load-some-data" class="section level2">
+<h2>Load some data</h2>
+<p>Let’s use our CDEC cnow course data to start, this should return a dataframe with 261 points, each with some basic lat/lon information, etc.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sharpshootR)  <span class="co"># CDEC.snow.courses, CDECquery, CDECsnowQuery</span>
+
+<span class="co"># GET DATA AND PREP </span>
+
+<span class="kw">data</span>(CDEC.snow.courses)
+snw&lt;-CDEC.snow.courses
+
+<span class="co"># make a few changes for plotting purposes</span>
+snw<span class="op">$</span>id&lt;-<span class="kw">as.factor</span>(snw<span class="op">$</span>id)
+snw<span class="op">$</span>latitude&lt;-<span class="kw">as.numeric</span>(snw<span class="op">$</span>latitude)
+snw<span class="op">$</span>longitude&lt;-<span class="kw">as.numeric</span>(snw<span class="op">$</span>longitude)<span class="op">*-</span><span class="dv">1</span>
+snw<span class="op">$</span>apr1avg_in&lt;-snw<span class="op">$</span>april.<span class="fl">1.</span>Avg.inches
+snw&lt;-dplyr<span class="op">::</span><span class="kw">select</span>(snw, course_number, id, elev_feet<span class="op">:</span>longitude,apr1avg_in)
+<span class="kw">str</span>(snw) <span class="co"># check out data</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    261 obs. of  6 variables:
+##  $ course_number: int  1 2 3 5 417 311 4 298 285 9 ...
+##  $ id           : Factor w/ 261 levels &quot;3LK&quot;,&quot;ABN&quot;,&quot;ABY&quot;,..: 176 133 230 141 41 140 84 76 227 68 ...
+##  $ elev_feet    : int  6700 6200 5850 6600 6450 6200 5900 5700 5500 7200 ...
+##  $ latitude     : num  41.4 41.8 41.4 41.2 41.6 ...
+##  $ longitude    : num  -123 -122 -123 -123 -123 ...
+##  $ apr1avg_in   : num  37.4 19 13.7 32.4 35.9 28.3 29.1 18.6 34 34.2 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># summary of data:</span>
+<span class="kw">summary</span>(snw)</code></pre></div>
+<pre><code>##  course_number         id        elev_feet        latitude    
+##  Min.   :  1.0   3LK    :  1   Min.   : 4350   Min.   :35.87  
+##  1st Qu.: 99.0   ABN    :  1   1st Qu.: 6500   1st Qu.:37.27  
+##  Median :196.0   ABY    :  1   Median : 7250   Median :38.41  
+##  Mean   :198.3   ADI    :  1   Mean   : 7613   Mean   :38.60  
+##  3rd Qu.:284.0   AGP    :  1   3rd Qu.: 8700   3rd Qu.:39.73  
+##  Max.   :438.0   ANR    :  1   Max.   :11450   Max.   :41.81  
+##                  (Other):255                                  
+##    longitude        apr1avg_in  
+##  Min.   :-123.2   Min.   : 1.3  
+##  1st Qu.:-120.6   1st Qu.:19.1  
+##  Median :-119.9   Median :28.5  
+##  Mean   :-120.0   Mean   :28.1  
+##  3rd Qu.:-119.0   3rd Qu.:36.1  
+##  Max.   :-118.2   Max.   :80.2  
+##                   NA&#39;s   :2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(snw)</code></pre></div>
+<pre><code>## [1] 261   6</code></pre>
+<p>How do we make the data spatial? See example in XY or in Lines/Polygons.</p>
+<!-- df_snw <- st_as_sf(snw, 
+                    coords = c(5, 4), # can use numbers here too
+                    remove = F, # don't remove these lat/lon cols from df
+                    crs = 4326) # add projection (this is WGS84)
+-->
+<div id="buffering" class="section level3">
+<h3>Buffering</h3>
 </div>
 </div>
 </div>

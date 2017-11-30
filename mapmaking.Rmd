@@ -10,7 +10,7 @@ title: "Mapmaking"
 
 **_Good maps make a difference!_**
 
-![*Need a better map*](figs/moat-far-side.png)
+<img src="figs/moat-far-side.png" width="500"/>
 
 <br>
 
@@ -26,13 +26,16 @@ This animation (created by Darkhorse Analytics, and used in Jenny Bryan's excell
 
 ![](figs/less-is-more-darkhorse-analytics.gif)
 
+<br>
 
 ## Projections and Coordinate Reference Systems (CRS)
 
-If you aren’t sure what the difference between projected (PCS) and geographic coordinate systems (GCS) are, here’s a (*very simplified*) summary. A few very helpful websites are:
+This is often one of the hardest and most complicated parts about working with spatial data. This is a (*very simplified*) summary of the difference between projected (PCS) and geographic coordinate systems (GCS). A few helpful websites to check/identify Proj4 strings or EPSG codes:
 
  - http://epsg.io/
  - http://spatialreference.org
+
+One way to think about projections is they represent different types of tableclothes that get stretched over a 3-dimensional globe. If you are working with locations on the tablecloth, the accuracy of your measurements will be higher than if you are near the edges or off the tablecloth and somewhere else on the globe. 
 
 ### GCS (Geographic Coordinate System)
 

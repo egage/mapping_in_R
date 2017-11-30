@@ -13,7 +13,8 @@ There are loads of spatial mapping/plotting packages in R. The main two ways to 
 ```{r load libs, warning=FALSE}
 suppressPackageStartupMessages({
   library(rgdal); # spatial/shp reading
-  library(tidyverse); # wrangling data/plotting
+  library(readr); # reading/writing files
+  library(dplyr); # wrangling data/plotting
   library(viridis); # nice color palette
   library(sf); # newer "simple features" spatial package
   library(rvest) # scraping web data
@@ -25,9 +26,7 @@ suppressPackageStartupMessages({
 
 ## Get XY Data: CA Hotsprings
 
-The simplest type of data to plot is X/Y points. You might have a `.csv` lying around with site locations, or even better, a shapefile. For now let's show how to get some data and use it with the packages disussed above. Scraping data from the web requires a table of some sort, and for this example, we'll use a Chrome browser (but same idea applies for other browsers). 
-
-Let's use this list of [CA hotsprings](http://www.hotspringsenthusiast.com/California.asp). It provides names, *Latitude & Longitude* and water temperatures in C and F for each hotspring. I've already downloaded the file (see optional section below for directions), so you can just read the file link directly into R as follows:
+The simplest type of data to plot is X/Y points. You might have a `.csv` lying around with site locations, or even better, a shapefile. For this example, et's use this list of [CA hotsprings](http://www.hotspringsenthusiast.com/California.asp). It provides names, *Latitude & Longitude* and water temperatures in C and F for each hotspring. I've already downloaded the file so you can just read the file link directly into R as follows:
 
 ```{r getHotspring_csv, echo=T, eval=T}
 
@@ -37,7 +36,7 @@ df_locs<- read_csv("https://raw.githubusercontent.com/ryanpeek/mapping_in_R/mast
 
 #### Optional: WebScraping the Table
 
-I'm going to use a method I demonstrated in a blog I wrote a few weeks ago (*[check it out here](https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/)*) which shows how to use a package called `rvest` to pretty quickly and easily grab data from any part of a webpage. Let's see how it works. 
+If you're interested in more info on web scraping, definitely check out some of the DSI material from Duncan ([here](https://github.com/dsidavis/WebScrapingFall17) and [here](https://github.com/dsidavis/AdvancedScrapingInfo)). I'm going to use a method I demonstrated in a blog I wrote a few weeks ago (*[check it out here](https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/)*) which shows how to use a package called `rvest` to pretty quickly and easily grab data from any part of a webpage. Let's see how it works. 
 
   - First we need to go the webpage, and then right click and select _**Inspect**_. I'm using Chrome as my browser here. 
   - Then in the upper right hand box, hover/scroll around until the table part of the webpage is highlighted. Right click on that line and select "**Copy** > **Copy Xpath**".
@@ -68,10 +67,11 @@ df_locs <- df_locs %>% set_names(nm = c("State", "Lat", "Lon", "Spring_Name", "T
 df_locs <- df_locs %>% mutate_at(.vars = c("Temp_C", "Temp_F"), .funs = as.numeric)
 
 # save as a CSV!
-write.csv(df_locs, file = "data/hotsprings_CA.csv", row.names = F)
+# write_csv(df_locs, path = "data/hotsprings_CA.csv")
+
 ```
 
-![sean](http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif) 
+<img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="500"/>
 
 ### Make XY "Spatial": `rgdal`
 
@@ -113,10 +113,6 @@ proj4string(df_locs_sp_utm) # double check data to make sure it has CRS
 Here's how to do the same thing using the `sf` package.
 
 ```{r makeXYspatial_sf, echo=T, eval=T}
-
-# read in data
-df_locs <- read.csv("data/hotsprings_CA.csv") %>% 
-  mutate(Lon= Lon * -1)
 
 # make data sf object: 
 df_locs_sf <- st_as_sf(df_locs, 
@@ -185,8 +181,7 @@ plot(df_locs_sf, pch=16, col=adjustcolor("maroon", alpha=0.7), cex=1.5) #YIKES
 
 # this is better
 plot(st_coordinates(df_locs_sf), pch=16, col=adjustcolor("maroon", alpha=0.7), cex=1.5)
-graphics::title("Map of CA Hot Springs",
-      family="Roboto Condensed")
+graphics::title("Map of CA Hot Springs")
 
 ```
 
@@ -216,7 +211,7 @@ nicemap<-
   scale_fill_viridis_c(option = "A")+
   labs(x="Longitude (WGS84)", y="Latitude",
        title="Hot Springs in California") + 
-  theme_bw(base_family = "Roboto Condensed")
+  theme_bw(base_family = "Roboto Condensed") # change this to sans if it doesn't plot
 nicemap
 
 # To save plot

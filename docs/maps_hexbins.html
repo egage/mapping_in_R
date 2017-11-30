@@ -369,6 +369,9 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="maps_sf.html">Using sf</a>
+    </li>
+    <li>
       <a href="maps_tmap.html">tmap</a>
     </li>
     <li>
@@ -488,7 +491,8 @@ gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="o
 <span class="st">  </span><span class="co"># the state label for each</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>centers, <span class="kw">aes</span>(<span class="dt">label=</span>id, <span class="dt">x=</span>x, <span class="dt">y=</span>y), <span class="dt">color=</span><span class="st">&quot;white&quot;</span>,
             <span class="dt">size=</span><span class="dv">4</span>, <span class="dt">show.legend =</span> F) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Mean # Days with Frost in State Capital  (1931-1960)&quot;</span>, <span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># change font if it&#39;s not working</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Mean # Days with Frost in State Capital  (1931-1960)&quot;</span>, <span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.border=</span><span class="kw">element_blank</span>(),
         <span class="dt">panel.grid=</span><span class="kw">element_blank</span>(), 
         <span class="dt">axis.ticks=</span><span class="kw">element_blank</span>(),
@@ -498,7 +502,31 @@ gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="o
 <p><img src="maps_hexbins_files/figure-html/hexstatebins-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># save it!</span>
 <span class="co">#ggsave(filename = &quot;./imgs/hexUS_Map.png&quot;, dpi = 200)</span></code></pre></div>
-<p><img src="maps_hexbins_files/figure-html/statebins-1.png" width="672" /><img src="maps_hexbins_files/figure-html/statebins-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#example 2:</span>
+
+<span class="co">#devtools::install_github(&quot;hrbrmstr/statebins&quot;, force=TRUE)</span>
+<span class="kw">library</span>(statebins)
+
+g &lt;-<span class="st"> </span>cdcfluview<span class="op">::</span><span class="kw">ili_weekly_activity_indicators</span>(<span class="dv">2017</span>)
+
+<span class="kw">ggplot</span>(g[g<span class="op">$</span>weeknumber<span class="op">==</span><span class="dv">46</span>,])<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_statebins</span>(<span class="kw">aes</span>(<span class="dt">state=</span>statename, <span class="dt">fill=</span>activity_level)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>viridis<span class="op">::</span><span class="kw">scale_fill_viridis</span>(<span class="dt">name=</span><span class="st">&quot;2017-11-18 Flu Activity&quot;</span>, <span class="dt">direction=</span><span class="op">-</span><span class="dv">1</span>,
+                              <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="maps_hexbins_files/figure-html/statebins-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="co">#theme_statebins(legend_position=&quot;top&quot;)</span>
+
+
+<span class="co"># great example from a hrbmstr tweet:</span>
+<span class="kw">library</span>(voteogram)
+
+<span class="kw">roll_call</span>(<span class="st">&quot;house&quot;</span>, <span class="dv">115</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">house_carto</span>(<span class="dt">pp_square=</span><span class="ot">TRUE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;115th / House / Session 1 / Vote 1&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_voteogram</span>()</code></pre></div>
+<p><img src="maps_hexbins_files/figure-html/statebins-2.png" width="672" /></p>
 </div>
 
 

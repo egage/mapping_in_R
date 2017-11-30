@@ -1,0 +1,108 @@
+---
+title: ""
+editor_options: 
+  chunk_output_type: console
+---
+
+# Using the `sf` Package
+
+This package is great and I've already shown a good bit on how to read files in, plot, crop data, etc.
+
+This is meant to link to the existing vignettes, and walk through a few more of the features/functions that `sf` provides. It's really pretty amazing.
+
+## Existing vignettes:
+
+There are some great [vignettes available for `sf`](https://cran.r-project.org/web/packages/sf/index.html). I'd start by looking though [**1**](https://cran.r-project.org/web/packages/sf/vignettes/sf1.html) & [**2**](https://cran.r-project.org/web/packages/sf/vignettes/sf2.html).
+
+### **`sf`** Functions
+
+I think one thing to keep in mind is the `sf` objects are dataframes...but some functions will return vectors or matrices based on the data. Here's a quick comparison of which returns what:
+
+**RETURNS NEW GEOMETRY (so `data.frame`)**
+ 
+ - `st_buffer`
+ - `st_boundary` 
+ - `st_convexhull`
+ - `st_union_cascaded` 
+ - `st_simplify` 
+ - `st_triangulate`
+ - `st_polygonize`
+ - `st_centroid`
+ - `st_segmentize`
+ - `st_union`
+
+**RETURNS index or logical Matrix**
+
+ - `st_intersects`
+ - `st_disjoint`
+ - `st_touches`
+ - `st_crosses`
+ - `st_within` 
+ - `st_contains`
+ - `st_overlaps`
+ - `st_equals`
+ - `st_covers`
+ - `st_covered_by`
+ - `st_equals_exact`
+ - `st_is_within_distance`
+ 
+## Load some data
+
+Let's use our CDEC cnow course data to start, this should return a dataframe with 261 points, each with some basic lat/lon information, etc.
+
+```{r getcdec, eval=T, echo=T}
+
+library(sharpshootR)  # CDEC.snow.courses, CDECquery, CDECsnowQuery
+
+# GET DATA AND PREP 
+
+data(CDEC.snow.courses)
+snw<-CDEC.snow.courses
+
+# make a few changes for plotting purposes
+snw$id<-as.factor(snw$id)
+snw$latitude<-as.numeric(snw$latitude)
+snw$longitude<-as.numeric(snw$longitude)*-1
+snw$apr1avg_in<-snw$april.1.Avg.inches
+snw<-dplyr::select(snw, course_number, id, elev_feet:longitude,apr1avg_in)
+str(snw) # check out data
+
+# summary of data:
+summary(snw)
+dim(snw)
+```
+
+How do we make the data spatial? See example in XY or in Lines/Polygons.
+
+<!-- df_snw <- st_as_sf(snw, 
+                    coords = c(5, 4), # can use numbers here too
+                    remove = F, # don't remove these lat/lon cols from df
+                    crs = 4326) # add projection (this is WGS84)
+-->
+
+### Buffering
+
+```{r buffer, eval=F, echo=F}
+
+library(sf)
+
+# make data spatial...how?
+df_snw <- st_as_sf(snw, 
+                    coords = c(5, 4), # can use numbers here too
+                    remove = T, # don't remove these lat/lon cols from df
+                    crs = 4326) # add projection (this is WGS84)
+
+
+df_snw # now is a sf object
+
+# snw1 <- st_buffer(df_snw, .001) # in degrees...doesn't work...let's transform
+
+df_snw <- st_transform(df_snw, 32610) # utms
+
+plot(st_geometry(df_snw), pch=16, col="maroon")
+
+# buffer?
+plot(st_buffer(df_snw, 5), border="blue")
+
+```
+

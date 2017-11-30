@@ -369,6 +369,9 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="maps_sf.html">Using sf</a>
+    </li>
+    <li>
       <a href="maps_tmap.html">tmap</a>
     </li>
     <li>
@@ -432,7 +435,8 @@ div.tocify {
 <p><strong>Let’s load packages first:</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
   <span class="kw">library</span>(rgdal); <span class="co"># spatial/shp reading</span>
-  <span class="kw">library</span>(tidyverse); <span class="co"># wrangling data/plotting</span>
+  <span class="kw">library</span>(dplyr); <span class="co"># wrangling data/plotting</span>
+  <span class="kw">library</span>(readr);
   <span class="kw">library</span>(viridis); <span class="co"># nice color palette</span>
   <span class="kw">library</span>(sf); <span class="co"># newer &quot;simple features&quot; spatial package</span>
   <span class="kw">library</span>(USAboundaries); <span class="co"># state/county data</span>
@@ -523,7 +527,13 @@ state_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class=
 <span class="co"># Download STATE data and add projection</span>
 CA&lt;-<span class="kw">us_states</span>(<span class="dt">resolution =</span> <span class="st">&quot;high&quot;</span>, <span class="dt">states =</span> state_names) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">st_transform</span>(<span class="dt">crs =</span> <span class="dv">4326</span>)</code></pre></div>
-<p>That was easy…what about counties? We can use the same type of call, but let’s add some <code>dplyr</code> and <code>purrr</code> functionality here to add the X and Y values for the centroid of each polygon (county) we pull. In this case we use <code>map_dbl</code> because it will take a vector or values (the <code>geometry</code> col here), map a function over each row in that vector, and return a vector of values (the centroid points).</p>
+<p>That was easy…what about counties? We can use the same type of call, but let’s add some <code>dplyr</code> and <code>purrr</code> functionality here to add the X and Y values for the centroid of each polygon (county) we download. In this case we use <code>map_dbl</code> because it will take a vector or values (the <code>geometry</code> col here), map a function over each row in that vector, and return a vector of values (the centroid points).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;purrr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Imap&#39;:
+## 
+##     imap</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Pick some CA counties</span>
 co_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Butte&quot;</span>, <span class="st">&quot;Placer&quot;</span>, <span class="st">&quot;El Dorado&quot;</span>, <span class="st">&quot;Nevada&quot;</span>, <span class="st">&quot;Yuba&quot;</span>, <span class="st">&quot;Sierra&quot;</span>, <span class="st">&quot;Plumas&quot;</span>)
 
@@ -583,7 +593,7 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 <pre><code>## although coordinates are longitude/latitude, st_intersection assumes that they are planar</code></pre>
 <pre><code>## Warning: attribute variables are assumed to be spatially constant
 ## throughout all geometries</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_crop)) <span class="co"># a quick plot check to make sure it worked</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">st_geometry</span>(rivers_crop), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>) <span class="co"># a quick plot check to make sure it worked</span></code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/crop_sf-1.png" width="672" /></p>
 <p>Great, let’s try our plot again.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># try again, let&#39;s switch layer ordering</span>
@@ -613,7 +623,7 @@ graphics<span class="op">::</span><span class="kw">title</span>(<span class="st"
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>rivers_crop, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">size=</span><span class="fl">0.5</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_label_repel</span>(<span class="dt">data=</span>counties_spec, <span class="kw">aes</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">label=</span>name)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_sf</span>(<span class="dt">xlim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)], <span class="dt">ylim =</span> mapRange1[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>)]) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># change to &quot;sans&quot; if this font not available</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Selected CA Counties and Riverlines&quot;</span>)</code></pre></div>
 <p><img src="spatial_linepoly_files/figure-html/ggplot_map1-2.png" width="672" /></p>
 </div>

@@ -20,6 +20,8 @@ navbar:
     - text: "Mapping Methods"
       icon: fa-cog fa-1x
       menu:
+        - text: "Using sf"
+          href: maps_sf.html
         - text: "tmap"
           href: maps_tmap.html
         - text: "mapview"

@@ -369,6 +369,9 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="maps_sf.html">Using sf</a>
+    </li>
+    <li>
       <a href="maps_tmap.html">tmap</a>
     </li>
     <li>
@@ -437,7 +440,7 @@ div.tocify {
   <span class="kw">library</span>(stringi)
   })
 
-gages &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>) <span class="co"># reads kml but not kmz?</span></code></pre></div>
+gages &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="st">&quot;data/streamgages_06.kml&quot;</span>) <span class="co"># reads kml but not kmz</span></code></pre></div>
 <pre><code>## Reading layer `USGS streamgages &#39; from data source `/Users/ryanpeek/Documents/github/teaching/mapping_in_R/data/streamgages_06.kml&#39; using driver `KML&#39;
 ## Simple feature collection with 2239 features and 2 fields
 ## geometry type:  POINT
@@ -445,6 +448,9 @@ gages &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class=
 ## bbox:           xmin: -124.2942 ymin: 32.55172 xmax: -114.1402 ymax: 42.00429
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs</code></pre>
+<div id="cleaningremoving-html-tags" class="section level3">
+<h3>Cleaning/Removing <code>html</code> tags</h3>
+<p>Once we have the data in, we still need to clean up some of the <code>html</code> bits that we don’t want. We can use some text/string functions to deal with this in R. <code>gsub</code> and <code>substr</code> are great functions for fixing/replacing text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># pull out relevant info (remove html tags)</span>
 gages<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Name)
 gages<span class="op">$</span>details &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">pattern=</span><span class="st">&quot;&lt;.*?&gt;&quot;</span>, <span class="st">&quot;&quot;</span>, gages<span class="op">$</span>Description)
@@ -456,7 +462,7 @@ gages<span class="op">$</span>date_e &lt;-<span class="st"> </span><span class="
 gages &lt;-<span class="st"> </span>gages <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(site_no<span class="op">:</span>date_e)
 gages<span class="op">$</span>gageID &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;T&quot;</span>, gages<span class="op">$</span>site_no)
 
-<span class="co"># grep all sites with AMERICAN?</span>
+<span class="co"># grep all sites with &quot;AMERICAN&quot;, &quot;YUBA&quot; or &quot;BEAR&quot; in site name</span>
 gages_AMER &lt;-<span class="st"> </span><span class="kw">filter</span>(gages, <span class="kw">grepl</span>(<span class="dt">pattern =</span> <span class="st">&quot;AMERICAN|YUBA|BEAR&quot;</span>,site))
 
 <span class="co"># simple map</span>
@@ -464,8 +470,12 @@ gages_AMER &lt;-<span class="st"> </span><span class="kw">filter</span>(gages, <
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,
        <span class="dt">title=</span><span class="st">&quot;USGS Gages in CA&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_sf</span>(<span class="dt">data=</span>gages, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>, <span class="dt">pch=</span><span class="dv">21</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
-<p><img src="spatial_kml_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="co"># change to sans if this font not local</span></code></pre></div>
+<p><img src="spatial_kml_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="add-a-ggmap-background" class="section level3">
+<h3>Add a <code>ggmap</code> background</h3>
+<p>Now we can add a different html background if we would like, or plot as a leaflet map with the <code>mapview</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># now with background</span>
 <span class="kw">library</span>(ggmap)
 
@@ -473,14 +483,43 @@ location&lt;-<span class="kw">c</span>(<span class="kw">mean</span>(<span class=
             <span class="kw">mean</span>(<span class="kw">st_coordinates</span>(gages_AMER)[,<span class="dv">2</span>]))
 
 map1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location,<span class="dt">crop =</span> F,
-                <span class="dt">color=</span><span class="st">&quot;bw&quot;</span>,
-                <span class="dt">maptype=</span><span class="st">&quot;terrain&quot;</span>,
-                <span class="dt">source=</span><span class="st">&quot;google&quot;</span>,
+                <span class="dt">source =</span> <span class="st">&quot;stamen&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;watercolor&quot;</span>,
                 <span class="dt">zoom=</span><span class="dv">8</span>)</code></pre></div>
-<pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.591282,-120.52633&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;language=en-EN&amp;sensor=false</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">terrain_bg &lt;-<span class="kw">ggmap</span>(map1)
- 
-terrain_bg <span class="op">+</span>
+<pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.591282,-120.52633&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;sensor=false</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/41/96.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/42/96.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/43/96.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/41/97.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/42/97.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/43/97.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/41/98.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/42/98.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/43/98.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/41/99.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/42/99.jpg</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/watercolor/8/43/99.jpg</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bg1 &lt;-<span class="kw">ggmap</span>(map1)
+
+map2 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location, <span class="dt">crop =</span> F,
+                <span class="dt">source =</span> <span class="st">&quot;stamen&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;toner&quot;</span>,
+                <span class="dt">zoom=</span><span class="dv">8</span>)</code></pre></div>
+<pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.591282,-120.52633&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=terrain&amp;sensor=false</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/41/96.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/42/96.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/43/96.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/41/97.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/42/97.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/43/97.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/41/98.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/42/98.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/43/98.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/41/99.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/42/99.png</code></pre>
+<pre><code>## Map from URL : http://tile.stamen.com/toner/8/43/99.png</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bg2 &lt;-<span class="kw">ggmap</span>(map2)
+
+<span class="co"># water color version </span>
+bg2 <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_viridis_d</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,
        <span class="dt">title=</span><span class="st">&quot;Selected USGS Gages with American | Yuba | Bear In Name&quot;</span>) <span class="op">+</span><span class="st"> </span>
@@ -491,8 +530,9 @@ terrain_bg <span class="op">+</span>
              <span class="dt">fill=</span><span class="st">&quot;dodgerblue&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">size=</span><span class="dv">3</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">ratio=</span><span class="fl">1.3</span>)</code></pre></div>
 <pre><code>## Coordinate system already present. Adding new coordinate system, which will replace the existing one.</code></pre>
-<pre><code>## Warning: Removed 13 rows containing missing values (geom_point).</code></pre>
-<p><img src="spatial_kml_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<pre><code>## Warning: Removed 10 rows containing missing values (geom_point).</code></pre>
+<p><img src="spatial_kml_files/figure-html/mapping-1.png" width="672" /></p>
+</div>
 </div>
 
 

@@ -14,4 +14,4 @@ There are many other resources available for working with rasters. Future posts/
 
 And now I distract the sparse content on this page with this Farside comic:
 
-![](figs/scientist-ice-cream.jpg)
+<img src="figs/scientist-ice-cream.jpg" width="500" height="600"/>

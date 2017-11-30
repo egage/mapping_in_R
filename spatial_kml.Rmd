@@ -18,7 +18,15 @@ suppressPackageStartupMessages({
   library(stringi)
   })
 
-gages <- st_read("data/streamgages_06.kml") # reads kml but not kmz?
+gages <- st_read("data/streamgages_06.kml") # reads kml but not kmz
+
+```
+
+### Cleaning/Removing `html` tags
+
+Once we have the data in, we still need to clean up some of the `html` bits that we don't want. We can use some text/string functions to deal with this in R. `gsub` and `substr` are great functions for fixing/replacing text.
+
+```{r eval=T, echo=T}
 
 # pull out relevant info (remove html tags)
 gages$name <- gsub(pattern="<.*?>", "", gages$Name)
@@ -31,7 +39,7 @@ gages$date_e <- substr(gages$details, start=32, stop=nchar(gages$details)-1)
 gages <- gages %>% dplyr::select(site_no:date_e)
 gages$gageID <- paste0("T", gages$site_no)
 
-# grep all sites with AMERICAN?
+# grep all sites with "AMERICAN", "YUBA" or "BEAR" in site name
 gages_AMER <- filter(gages, grepl(pattern = "AMERICAN|YUBA|BEAR",site))
 
 # simple map
@@ -39,7 +47,15 @@ ggplot() +
   labs(x="Longitude (WGS84)", y="Latitude",
        title="USGS Gages in CA") + 
   geom_sf(data=gages, col="blue", lwd=0.4, pch=21) +
-  theme_bw(base_family = "Roboto Condensed")
+  theme_bw(base_family = "Roboto Condensed") # change to sans if this font not local
+
+```
+
+### Add a `ggmap` background
+
+Now we can add a different html background if we would like, or plot as a leaflet map with the `mapview` package.
+
+```{r mapping, eval=T, echo=T}
 
 # now with background
 library(ggmap)
@@ -48,14 +64,18 @@ location<-c(mean(st_coordinates(gages_AMER)[,1]),
             mean(st_coordinates(gages_AMER)[,2]))
 
 map1 <- get_map(location=location,crop = F,
-                color="bw",
-                maptype="terrain",
-                source="google",
+                source = "stamen", maptype = "watercolor",
+                zoom=8)
+bg1 <-ggmap(map1)
+
+map2 <- get_map(location=location, crop = F,
+                source = "stamen", maptype = "toner",
                 zoom=8)
 
-terrain_bg <-ggmap(map1)
- 
-terrain_bg +
+bg2 <-ggmap(map2)
+
+# water color version 
+bg2 +
   scale_color_viridis_d() +
   labs(x="Longitude (WGS84)", y="Latitude",
        title="Selected USGS Gages with American | Yuba | Bear In Name") + 

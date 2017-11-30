@@ -369,6 +369,9 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="maps_sf.html">Using sf</a>
+    </li>
+    <li>
       <a href="maps_tmap.html">tmap</a>
     </li>
     <li>
@@ -432,7 +435,8 @@ div.tocify {
 <p><strong>Let’s load packages first:</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
   <span class="kw">library</span>(rgdal); <span class="co"># spatial/shp reading</span>
-  <span class="kw">library</span>(tidyverse); <span class="co"># wrangling data/plotting</span>
+  <span class="kw">library</span>(readr); <span class="co"># reading/writing files</span>
+  <span class="kw">library</span>(dplyr); <span class="co"># wrangling data/plotting</span>
   <span class="kw">library</span>(viridis); <span class="co"># nice color palette</span>
   <span class="kw">library</span>(sf); <span class="co"># newer &quot;simple features&quot; spatial package</span>
   <span class="kw">library</span>(rvest) <span class="co"># scraping web data</span>
@@ -441,8 +445,7 @@ div.tocify {
   }) </code></pre></div>
 <div id="get-xy-data-ca-hotsprings" class="section level2">
 <h2>Get XY Data: CA Hotsprings</h2>
-<p>The simplest type of data to plot is X/Y points. You might have a <code>.csv</code> lying around with site locations, or even better, a shapefile. For now let’s show how to get some data and use it with the packages disussed above. Scraping data from the web requires a table of some sort, and for this example, we’ll use a Chrome browser (but same idea applies for other browsers).</p>
-<p>Let’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’ve already downloaded the file (see optional section below for directions), so you can just read the file link directly into R as follows:</p>
+<p>The simplest type of data to plot is X/Y points. You might have a <code>.csv</code> lying around with site locations, or even better, a shapefile. For this example, et’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’ve already downloaded the file so you can just read the file link directly into R as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>)</code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
@@ -457,7 +460,7 @@ div.tocify {
 ## )</code></pre>
 <div id="optional-webscraping-the-table" class="section level4">
 <h4>Optional: WebScraping the Table</h4>
-<p>I’m going to use a method I demonstrated in a blog I wrote a few weeks ago (<em><a href="https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/">check it out here</a></em>) which shows how to use a package called <code>rvest</code> to pretty quickly and easily grab data from any part of a webpage. Let’s see how it works.</p>
+<p>If you’re interested in more info on web scraping, definitely check out some of the DSI material from Duncan (<a href="https://github.com/dsidavis/WebScrapingFall17">here</a> and <a href="https://github.com/dsidavis/AdvancedScrapingInfo">here</a>). I’m going to use a method I demonstrated in a blog I wrote a few weeks ago (<em><a href="https://ryanpeek.github.io/2017-10-24-mapping-with-sf-part-1/">check it out here</a></em>) which shows how to use a package called <code>rvest</code> to pretty quickly and easily grab data from any part of a webpage. Let’s see how it works.</p>
 <ul>
 <li>First we need to go the webpage, and then right click and select <em><strong>Inspect</strong></em>. I’m using Chrome as my browser here.</li>
 <li>Then in the upper right hand box, hover/scroll around until the table part of the webpage is highlighted. Right click on that line and select “<strong>Copy</strong> &gt; <strong>Copy Xpath</strong>”.</li>
@@ -486,11 +489,8 @@ df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><spa
 df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)
 
 <span class="co"># save as a CSV!</span>
-<span class="kw">write.csv</span>(df_locs, <span class="dt">file =</span> <span class="st">&quot;data/hotsprings_CA.csv&quot;</span>, <span class="dt">row.names =</span> F)</code></pre></div>
-<div class="figure">
-<img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" alt="sean" />
-<p class="caption">sean</p>
-</div>
+<span class="co"># write_csv(df_locs, path = &quot;data/hotsprings_CA.csv&quot;)</span></code></pre></div>
+<p><img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="500"/></p>
 </div>
 <div id="make-xy-spatial-rgdal" class="section level3">
 <h3>Make XY “Spatial”: <code>rgdal</code></h3>
@@ -544,11 +544,7 @@ df_locs_sp_utm&lt;-<span class="kw">spTransform</span>(df_locs_sp, utms)
 <div id="make-xy-spatial-sf" class="section level3">
 <h3>Make XY “Spatial”: <code>sf</code></h3>
 <p>Here’s how to do the same thing using the <code>sf</code> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in data</span>
-df_locs &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/hotsprings_CA.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Lon=</span> Lon <span class="op">*</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span>)
-
-<span class="co"># make data sf object: </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make data sf object: </span>
 df_locs_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df_locs, 
 <span class="co">#                    coords = c(&quot;Lon&quot;, &quot;Lat&quot;), # can use numbers here too</span>
                     <span class="dt">coords =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="co"># can use numbers here too</span>
@@ -603,8 +599,7 @@ df_locs_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df_loc
 <p><img src="spatial_XY_files/figure-html/mapXY_sf1-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is better</span>
 <span class="kw">plot</span>(<span class="kw">st_coordinates</span>(df_locs_sf), <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)
-graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Map of CA Hot Springs&quot;</span>,
-      <span class="dt">family=</span><span class="st">&quot;Roboto Condensed&quot;</span>)</code></pre></div>
+graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Map of CA Hot Springs&quot;</span>)</code></pre></div>
 <p><img src="spatial_XY_files/figure-html/mapXY_sf1-2.png" width="672" /></p>
 </div>
 <div id="plotting-with-ggplot-and-ggmap" class="section level3">
@@ -631,7 +626,7 @@ nicemap&lt;-
 <span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;A&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,
        <span class="dt">title=</span><span class="st">&quot;Hot Springs in California&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>)
+<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="co"># change this to sans if it doesn&#39;t plot</span>
 nicemap</code></pre></div>
 <pre><code>## Warning: Removed 255 rows containing missing values (geom_point).</code></pre>
 <p><img src="spatial_XY_files/figure-html/mapXY_sf2-1.png" width="672" /></p>

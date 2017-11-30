@@ -8,7 +8,7 @@ title: ""
 
 This package is pretty cool, and has a bunch of functionality. There are a number of [vignettes online already](https://r-spatial.github.io/mapview/articles/index.html), in particular check out the basic overview vignette [here](https://r-spatial.github.io/mapview/articles/articles/mapview_01-basics.html). 
 
-This tutorial is just a quick demo of what you can do with `mapview`, and to show it's simplicity. It's not meant to be comprehensive. See the vignettes details.
+This tutorial is currently just the vignette material linked above, nothing new, just all posted here. Main point is to provide a quick demo of what you can do with `mapview`, and to show it's simplicity. It's not meant to be comprehensive. See the vignettes details.
 
 ```{r}
 library(mapview)
@@ -19,14 +19,14 @@ mapview(breweries)
 
 ## Main Functions
 
-`mapview` - view potentially multiple spatial objects on a set of background maps
-`viewExtent` - view extent / bounding box of spatial objects
-`viewRGB` - view RGB true- or false-color images of raster objects
-`latticeView` & `sync` - view small multiples of several potentially synchronised maps
-`slideView` - view two overlaid raster objects with a horizontal slider to hide/reveal one of them
-`cubeView` - 3D view of raster data cubes (e.g. space-time cube) with keyboard control over position of slices
-`plainview` - view large rasters on a plain background (i.e. no background map)
-`mapshot` - easily save maps (including leaflet maps) as html or png (or other image formats)
+ - `mapview` - view potentially multiple spatial objects on a set of background maps
+ - `viewExtent` - view extent / bounding box of spatial objects
+ - `viewRGB` - view RGB true- or false-color images of raster objects
+ - `latticeView` & `sync` - view small multiples of several potentially synchronised maps
+ - `slideView` - view two overlaid raster objects with a horizontal slider to hide/reveal one of them
+ - `cubeView` - 3D view of raster data cubes (e.g. space-time cube) with keyboard control over position of slices
+ - `plainview` - view large rasters on a plain background (i.e. no background map)
+ - `mapshot` - easily save maps (including leaflet maps) as html or png (or other image formats)
 
 ### Spatial Data Supported in `mapview`
 

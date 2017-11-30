@@ -13,7 +13,8 @@ There are loads of spatial mapping/plotting packages in R. The main two ways to 
 ```{r load libs, warning=FALSE}
 suppressPackageStartupMessages({
   library(rgdal); # spatial/shp reading
-  library(tidyverse); # wrangling data/plotting
+  library(dplyr); # wrangling data/plotting
+  library(readr);
   library(viridis); # nice color palette
   library(sf); # newer "simple features" spatial package
   library(USAboundaries); # state/county data
@@ -78,13 +79,14 @@ state_names <- c("california")
 CA<-us_states(resolution = "high", states = state_names) %>%
   st_transform(crs = 4326)
 
-
-
 ```
 
-That was easy...what about counties? We can use the same type of call, but let's add some `dplyr` and `purrr` functionality here to add the X and Y values for the centroid of each polygon (county) we pull. In this case we use `map_dbl` because it will take a vector or values (the `geometry` col here), map a function over each row in that vector, and return a vector of values (the centroid points).
+That was easy...what about counties? We can use the same type of call, but let's add some `dplyr` and `purrr` functionality here to add the X and Y values for the centroid of each polygon (county) we download. In this case we use `map_dbl` because it will take a vector or values (the `geometry` col here), map a function over each row in that vector, and return a vector of values (the centroid points).
 
 ```{r getCountiesData, echo=T, eval=T}
+
+library(purrr)
+
 # Pick some CA counties
 co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Plumas")
 
@@ -96,6 +98,7 @@ counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use l
 
 # get range of lat/longs from counties for mapping
 mapRange1 <- c(range(st_coordinates(counties_spec)[,1]),range(st_coordinates(counties_spec)[,2]))
+
 ```
 
 ## Make some Maps!
@@ -145,6 +148,7 @@ plot(st_geometry(counties_spec), col=adjustcolor("maroon", alpha=0.5), cex=1.5, 
 text(counties_spec$lon, counties_spec$lat, labels = counties_spec$name,
      col=adjustcolor("white", alpha=0.8), font = 2)
 graphics::title("Selected CA Counties")
+
 ```
 
 That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?
@@ -157,7 +161,7 @@ Great thing is that `sf` has some really nice tools for this, just as any GIS pr
 
 rivers_crop <- st_intersection(rivers_sf, counties_spec)
 
-plot(st_geometry(rivers_crop)) # a quick plot check to make sure it worked
+plot(st_geometry(rivers_crop), col="blue") # a quick plot check to make sure it worked
 
 ```
 
@@ -196,7 +200,7 @@ ggplot() +
   geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5)+
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
   coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
-  theme_bw() +
+  theme_bw(base_family = "Roboto Condensed") + # change to "sans" if this font not available
   labs(title="Selected CA Counties and Riverlines")
 
 ```

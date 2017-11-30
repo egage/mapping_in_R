@@ -15,7 +15,7 @@ date: "Updated: `r format(Sys.Date())`"
 
 Computer literacy is now essential in all aspects of science. Data management skills are needed for entering data without errors, storing it in a usable way, and extracting key aspects of the data for analysis. **Maps are no different**. We want to know how to provide spatial information in a clear and concise way so any reader can extract the important bits. Communicating the details visually is sometimes a difficult task, made more complicated by the influx of tools and methods available. 
 
-![](figs/farside_middle.jpg)
+<img src="figs/farside_middle.jpg" width="500"/>
 
 
 ## Goals
