@@ -6,7 +6,7 @@ title: "Resources"
 
 * [**Intro to Spatial R**](https://cran.r-project.org/doc/contrib/intro-spatial-rl.pdf)
 * [**Spatial.ly blog**](http://spatial.ly/)
-* [**`rgdal` based tutorial** by Jeff Hollister](http://jwhollister.com/iale_open_science/2015/07/05/03-Spatial-Data-In-R/)
+* [**Spatial Analysis with R tutorial** by Jeff Hollister](http://jwhollister.com/r_landscape_tutorial/tutorial.html)
 * [**Making GeoJSON from shapefiles**](https://blog.exploratory.io/creating-geojson-out-of-shapefile-in-r-40bc0005857d)
 
 ## Data Visualization

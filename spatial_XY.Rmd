@@ -80,7 +80,13 @@ Now we have some data, let's show how to read it in as spatial data using the `r
 ```{r makeXYspatial_rgdal, echo=T, eval=T}
 
 # read in data
-df_locs <- read.csv("https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv") # or as file:  data/hotsprings_CA.csv
+df_locs <- read_csv("https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv") # or as file:  data/hotsprings_CA.csv
+
+# rename
+df_locs <- df_locs %>% set_names(nm = c("State", "Lat", "Lon", "Spring_Name", "Temp_C", "Temp_F", "Area", "USGS_Quad"))
+
+# Make the temp data numeric
+df_locs <- df_locs %>% mutate_at(.vars = c("Temp_C", "Temp_F"), .funs = as.numeric)
 
 head(df_locs) # wait...what's up with Lon?
 

@@ -449,14 +449,14 @@ div.tocify {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>)</code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
-##   State = col_character(),
-##   Lat = col_double(),
-##   Lon = col_double(),
-##   Spring_Name = col_character(),
-##   Temp_C = col_integer(),
-##   Temp_F = col_integer(),
-##   Area = col_character(),
-##   USGS_Quad = col_character()
+##   X1 = col_character(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character()
 ## )</code></pre>
 <div id="optional-webscraping-the-table" class="section level4">
 <h4>Optional: WebScraping the Table</h4>
@@ -496,23 +496,38 @@ df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><spa
 <h3>Make XY “Spatial”: <code>rgdal</code></h3>
 <p>Now we have some data, let’s show how to read it in as spatial data using the <code>rgdal</code> pipeline. This requires creating a <code>SpatialPointsDataFrame</code>. We’ll use the extension <code>sp</code> for data of this type.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in data</span>
-df_locs &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>) <span class="co"># or as file:  data/hotsprings_CA.csv</span>
+df_locs &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>) <span class="co"># or as file:  data/hotsprings_CA.csv</span></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   X1 = col_character(),
+##   X2 = col_double(),
+##   X3 = col_double(),
+##   X4 = col_character(),
+##   X5 = col_character(),
+##   X6 = col_character(),
+##   X7 = col_character(),
+##   X8 = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># rename</span>
+df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(<span class="dt">nm =</span> <span class="kw">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Spring_Name&quot;</span>, <span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>, <span class="st">&quot;Area&quot;</span>, <span class="st">&quot;USGS_Quad&quot;</span>))
 
-<span class="kw">head</span>(df_locs) <span class="co"># wait...what&#39;s up with Lon?</span></code></pre></div>
-<pre><code>##   State    Lat     Lon                           Spring_Name Temp_C Temp_F
-## 1    CA 38.802 122.810                   THE \n      GEYSERS    214    101
-## 2    CA 38.767 122.748                LITTLE \n      GEYSERS    210     99
-## 3    CA 41.534 120.078 HOT \n      SPRINGS (SURPRISE VALLEY)    208     98
-## 4    CA 36.045 117.769              COSO \n      HOT SPRINGS    207     97
-## 5    CA 41.670 120.206         LAKE \n      CITY HOT SPRINGS    207     97
-## 6    CA 36.036 117.802                DEVILS \n      KITCHEN    207     97
-##           Area              USGS_Quad
-## 1   SANTA ROSA        THE GEYSERS 7.5
-## 2   SANTA ROSA (WHISPERING PINES 7.5)
-## 3      ALTURAS          CEDARVILLE 15
-## 4 DEATH VALLEY    HAIWEE RESERVOIR 15
-## 5      ALTURAS          CEDARVILLE 15
-## 6 DEATH VALLEY    HAIWEE RESERVOIR 15</code></pre>
+<span class="co"># Make the temp data numeric</span>
+df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)</code></pre></div>
+<pre><code>## Warning in evalq(as.numeric(Temp_C), &lt;environment&gt;): NAs introduced by
+## coercion</code></pre>
+<pre><code>## Warning in evalq(as.numeric(Temp_F), &lt;environment&gt;): NAs introduced by
+## coercion</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df_locs) <span class="co"># wait...what&#39;s up with Lon?</span></code></pre></div>
+<pre><code>## # A tibble: 6 x 8
+##   State    Lat     Lon                               Spring_Name Temp_C
+##   &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;                                     &lt;chr&gt;  &lt;dbl&gt;
+## 1    CA 38.802 122.810                   &quot;THE \r\n      GEYSERS&quot;    214
+## 2    CA 38.767 122.748                &quot;LITTLE \r\n      GEYSERS&quot;    210
+## 3    CA 41.534 120.078 &quot;HOT \r\n      SPRINGS (SURPRISE VALLEY)&quot;    208
+## 4    CA 36.045 117.769              &quot;COSO \r\n      HOT SPRINGS&quot;    207
+## 5    CA 41.670 120.206         &quot;LAKE \r\n      CITY HOT SPRINGS&quot;    207
+## 6    CA 36.036 117.802                &quot;DEVILS \r\n      KITCHEN&quot;    207
+## # ... with 3 more variables: Temp_F &lt;dbl&gt;, Area &lt;chr&gt;, USGS_Quad &lt;chr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs<span class="op">$</span>Lon &lt;-<span class="st"> </span>df_locs<span class="op">$</span>Lon <span class="op">*</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span>
 
 <span class="co"># make CDEC data sf object (spatial): </span>

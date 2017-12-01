@@ -44,6 +44,10 @@ rivers_sp<- readOGR(dsn = "data", layer = "rivs_CA_OR_hydroshed")
 
 proj4string(rivers_sp) # check projection, should be WGS84
 
+# raster time comparison (uses rgdal currently)
+# library(raster)
+# rivers_rast <- shapefile("data/rivs_CA_OR_hydroshed.shp")
+
 ```
 
 ### Load shapefiles with `sf`
@@ -72,12 +76,16 @@ Let's show this in two steps, the first is how to grab a `sf` feature for a give
 
 ```{r getStateData, echo=T, eval=T}
 
+library(USAboundaries)
+
 # Pick a State
 state_names <- c("california")
 
 # Download STATE data and add projection
-CA<-us_states(resolution = "high", states = state_names) %>%
-  st_transform(crs = 4326)
+CA<-us_states(resolution = "high", states = state_names) #%>%
+  #st_transform(crs = 32610)
+
+st_crs(CA)
 
 ```
 
@@ -92,12 +100,11 @@ co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Pluma
 
 # get COUNTY data for a given state
 counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use list of state(s) here
+  
   filter(name %in% co_names) %>% # filter to just the counties we want
+  
   mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), # add centroid values for labels
          lat=map_dbl(geometry, ~st_centroid(.x)[[2]])) # add centroid values for labels
-
-# get range of lat/longs from counties for mapping
-mapRange1 <- c(range(st_coordinates(counties_spec)[,1]),range(st_coordinates(counties_spec)[,2]))
 
 ```
 
@@ -153,15 +160,22 @@ graphics::title("Selected CA Counties")
 
 That's a little better...but still not quite what we want. Lots of extra ink going toward stuff that we don't need (i.e., rivers outside of counties). What about cropping the river layer to our county layer?
 
-### Cropping with `sf`
+### Cropping & Buffering with `sf`
 
 Great thing is that `sf` has some really nice tools for this, just as any GIS program would.  Here let's use `st_intersection` to crop our river layer to only rivers in the counties of interest.
 
 ```{r crop_sf}
 
+# crop rivers by counties
 rivers_crop <- st_intersection(rivers_sf, counties_spec)
 
+# plot
 plot(st_geometry(rivers_crop), col="blue") # a quick plot check to make sure it worked
+
+# buffer a single county?
+county_buff <- st_buffer(counties_spec[counties_spec$name=="El Dorado",], dist = .05)
+plot(st_geometry(counties_spec))
+plot(st_geometry(county_buff), border="red", add=T)
 
 ```
 
@@ -204,6 +218,46 @@ ggplot() +
   labs(title="Selected CA Counties and Riverlines")
 
 ```
+
+### Add ggmap
+
+```{r}
+
+library(ggmap)
+location=c(-121,39.5) # set the center of the map
+# set the background map up
+map1 <- get_map(location=location, crop = F,
+             color="bw",
+             maptype="terrain",
+             source="google",
+             zoom=8)
+
+
+ggmap(map1) +
+  geom_sf(data=CA, color = "gray30", lwd=2, fill=NA, inherit.aes = F) +
+  geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4, inherit.aes = F) +
+  geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5, inherit.aes = F)+
+  geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
+  coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
+  theme_bw(base_family = "Roboto Condensed") + # change to "sans" if this font not available
+  labs(title="Selected CA Counties and Riverlines")
+```
+
+### Add an interactive *leaflet* map
+
+We can add our `sf` data directly into a leaflet map using the `mapview` package.
+
+```{r mapview}
+
+library(mapview)
+
+m1 <- mapview(rivers_crop)
+m2 <- mapview(counties_spec, fill=NA)
+
+# combine using the ggplot style "+"
+m1 + m2
+```
+
 
 ## Put it All Together
 

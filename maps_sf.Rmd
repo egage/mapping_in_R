@@ -46,63 +46,347 @@ I think one thing to keep in mind is the `sf` objects are dataframes...but some 
  - `st_equals_exact`
  - `st_is_within_distance`
  
-## Load some data
+### Load Point Data
 
 Let's use our CDEC cnow course data to start, this should return a dataframe with 261 points, each with some basic lat/lon information, etc.
 
 ```{r getcdec, eval=T, echo=T}
-
+library(sf)
 library(sharpshootR)  # CDEC.snow.courses, CDECquery, CDECsnowQuery
+library(dplyr)
 
-# GET DATA AND PREP 
-
+# GET DATA
 data(CDEC.snow.courses)
-snw<-CDEC.snow.courses
 
-# make a few changes for plotting purposes
-snw$id<-as.factor(snw$id)
-snw$latitude<-as.numeric(snw$latitude)
-snw$longitude<-as.numeric(snw$longitude)*-1
-snw$apr1avg_in<-snw$april.1.Avg.inches
-snw<-dplyr::select(snw, course_number, id, elev_feet:longitude,apr1avg_in)
-str(snw) # check out data
+# Make into a dataframe
+snw<-CDEC.snow.courses
+snw$course_number <- as.factor(snw$course_number)
+snw$longitude<-as.numeric(snw$longitude)*-1 # fix longitude, must be negative for northern hemisphere
+# rename col:
+snw <- snw %>% rename(apr1avg_in=april.1.Avg.inches)
 
 # summary of data:
 summary(snw)
 dim(snw)
-```
-
-How do we make the data spatial? See example in XY or in Lines/Polygons.
-
-<!-- df_snw <- st_as_sf(snw, 
-                    coords = c(5, 4), # can use numbers here too
-                    remove = F, # don't remove these lat/lon cols from df
-                    crs = 4326) # add projection (this is WGS84)
--->
-
-### Buffering
-
-```{r buffer, eval=F, echo=F}
-
-library(sf)
-
-# make data spatial...how?
-df_snw <- st_as_sf(snw, 
-                    coords = c(5, 4), # can use numbers here too
-                    remove = T, # don't remove these lat/lon cols from df
-                    crs = 4326) # add projection (this is WGS84)
-
-
-df_snw # now is a sf object
-
-# snw1 <- st_buffer(df_snw, .001) # in degrees...doesn't work...let's transform
-
-df_snw <- st_transform(df_snw, 32610) # utms
-
-plot(st_geometry(df_snw), pch=16, col="maroon")
-
-# buffer?
-plot(st_buffer(df_snw, 5), border="blue")
 
 ```
 
+How do we make the data spatial with `sf`? See example in XY or in Lines/Polygons.
+
+```{r, eval=T, echo=F}
+snw_sf <- st_as_sf(snw, 
+                   coords = c(6, 5), # can use numbers here too
+                   remove = F, # don't remove these lat/lon cols from df
+                   crs = 4326) # add projection (this is UTM11)
+```
+
+Let's do some basic data viewing/summary.
+
+```{r, eval=T, echo=T}
+
+# get geometry info: returns list column
+snw_geom <- st_geometry(snw_sf)
+
+# get coordinates: note this will return a matrix/vector of coordinates
+head(snw_coords <- st_coordinates(snw_sf))
+
+st_crs(snw_sf) # check the crs/projection info
+
+```
+
+### Load Shapefile Data: Unzipped
+
+Ok, let's load a shapfile. I'll show how to do it as the unzipped version (standard), and then how to do it with a zipped shapefile.
+
+```{r shapefilepolys}
+
+# notice the similar function structure, but results in dataframe
+rivers_sf <- st_read(dsn = "./data", layer="rivs_CA_OR_hydroshed") 
+
+# check crs
+st_crs(rivers_sf)
+
+plot(st_geometry(rivers_sf), col="blue3")
+
+```
+
+### Load Shapefile Data: Unzipped
+
+Ok, let's load a shapfile. I'll show how to do it as the unzipped version (standard), and then how to do it with a zipped shapefile.
+
+```{r shapefilepolysZip}
+
+# link to zipped version is here:
+# download.file(url = "https://github.com/ryanpeek/mapping_in_R/blob/master/data/rivs_CA_OR_hydroshed.zip?raw=true",
+#              destfile = "data/rivs_CA_OR_hydroshed.zip")
+
+# will give a warning message...that's ok
+rivers_sf <- st_read(unzip("data/rivs_CA_OR_hydroshed.zip")) 
+
+# now remove the "temp" unzipped shapefile from your directory, 
+# Make sure you are removing the temporary unzipped version, and not the original zip.
+# the zipped version should remain in "data", the temp unzipped version should be in your main working dir
+
+file.remove(list.files(pattern="rivs_CA_OR_hydroshed", recursive = F)) # should return TRUE for every file associated with shapefile
+
+# check crs
+st_crs(rivers_sf)
+
+```
+
+Sweet. Ok...let's show a few other helpful pieces.
+
+## Spatial Operations
+
+Often you need to buffer out from a set of polygons or points...or clip/crop data to a specific polygon. Let's see how that works. Let's use the `USAboundaries` package. Another great package [`tidycensus`](https://walkerke.github.io/tidycensus/), though you need to sign up for a free API key. .
+
+
+### `USAboundaries` Example: Add Centroid
+
+First get the data and add a centroid to the counties.
+
+```{r usaboundaries, eval=T, echo=T}
+
+library(USAboundaries)
+
+# Pick a State
+state_names <- c("california")
+
+# Download STATE data and add projection
+CA<-us_states(resolution = "high", states = state_names) %>%
+  st_transform(crs = 4269) # defaults to 4326
+
+st_crs(CA)
+
+library(purrr)
+
+# Pick some CA counties
+co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Plumas")
+
+# get COUNTY data for a given state
+counties_spec <- us_counties(resolution = "low", states=state_names) %>% # use list of state(s) here
+  st_transform(crs=26911) %>% 
+  filter(name %in% co_names) # filter to just the counties we want
+
+# to add centroid points to existing sf dataframe, we can use purrr:
+counties_spec <- counties_spec %>% 
+  mutate(lon=map_dbl(geometry, ~st_centroid(.x)[[1]]), # add centroid values for labels
+         lat=map_dbl(geometry, ~st_centroid(.x)[[2]])) # add centroid values for labels
+
+# or to create new sf object, just call st_centroid on dataframe:
+counties_centroid <- st_centroid(counties_spec)
+
+plot(st_geometry(counties_spec), border="darkgreen")
+
+# option 1:
+plot(st_geometry(counties_centroid), col="maroon", pch=16, add=T)
+
+# option 2:
+points(counties_spec$lon, counties_spec$lat, col="blue", pch=21, cex=2)
+
+```
+
+### `tidycensus` Example Data
+
+```{r tidycensus, eval=T, echo=F}
+
+library(tidycensus)
+#m90 <- get_decennial(geography = "state", variables = "H043A001", year = 1990)
+
+library(tidyverse)
+options(tigris_use_cache = TRUE)
+
+# Pick some CA counties
+co_names <- c("Butte", "Placer", "El Dorado", "Nevada", "Yuba", "Sierra", "Plumas")
+
+counties_cens <- get_acs(state = "CA", county = co_names, geography = "tract", 
+                  variables = "B19013_001", geometry = TRUE)
+
+#head(counties_cens)
+
+library(viridis)
+
+counties_cens %>%
+  ggplot(aes(fill = estimate, color = estimate)) + 
+  geom_sf() + 
+  coord_sf(crs = 26911) + # NAD83 Zone 11 UTMs metric
+  scale_fill_viridis("Median Household Income", option = "magma") + 
+  scale_color_viridis("Median Household Income", option = "magma") +
+  theme_bw(base_family = "Roboto Condensed")
+
+```
+
+### Crop Data
+
+Let's crop our river data to the counties of interest. Remember, these are dataframes, so we can crop all, or select a single county to crop to. For these operations, it's important things are in same projection.
+
+```{r crop_all, eval=T, echo=T}
+
+# check crs:
+st_crs(rivers_sf)
+st_crs(counties_spec)
+
+# fix the rivers_sf layer to match counties
+rivers_sf <- st_transform(rivers_sf, crs = 26911)
+
+# now crop!
+rivers_crop <- st_intersection(rivers_sf, counties_spec)
+
+# plot it
+plot(st_geometry(rivers_crop), col="blue") # a quick plot check to make sure it worked
+
+```
+
+What if we want to crop by a single county?
+
+```{r crop_single, eval=T, echo=T}
+
+# check crs:
+st_crs(rivers_sf)
+st_crs(counties_spec)
+
+# fix the rivers_sf layer to match counties
+rivers_sf <- st_transform(rivers_sf, crs = 26911)
+
+# now crop!
+rivers_crop1 <- st_intersection(rivers_sf, counties_spec[1,]) # could use counties_spec[counties_spec$Nevada,] too
+
+plot(st_geometry(counties_spec), lwd=2)
+plot(st_geometry(rivers_crop), col="blue", add=T) 
+plot(st_geometry(rivers_crop1), col="maroon", lwd=2, add=T)
+
+```
+
+### Buffer Data
+
+```{r buffer, echo=T, eval=T}
+
+county_buff <- st_buffer(counties_spec[counties_spec$name=="Nevada",], dist =3000) # in meters
+
+# plot
+plot(st_geometry(counties_spec), axes=T)
+plot(st_geometry(county_buff), border="red", lwd=2, add=T)
+plot(st_geometry(counties_centroid[1,]), pch=16, add=T, col="blue", cex=3)
+```
+
+```{r addsnowpoints}
+
+# transform data of snowstations:
+st_crs(snw_sf)
+snw_sf <- st_transform(snw_sf, crs = 26911)
+
+plot(st_geometry(counties_spec[1,]))
+plot(st_geometry(county_buff), border="red", lwd=2, add=T)
+plot(st_geometry(counties_centroid[1,]), pch=16, add=T, col="blue", cex=3)
+plot(st_geometry(snw_sf), bg="yellow", pch=21, add=T)
+
+```
+
+### Dissolve Boundaries
+
+One other common task is dissolving boundaries across a common group. For example, let's say we want to dissolve al the selected counties into one big polygon.
+
+```{r union, echo=T, eval=T}
+
+counties_dissolve <- st_union(counties_spec,by_feature = FALSE)
+
+# by feature allows all geometries to be unioned together into a single geometry. 
+plot(st_geometry(counties_dissolve))
+
+```
+
+## `ggmap`
+
+This allows us to add some boundaries to a map. There are many types of backgrounds. In order for `sf` objects to work within `ggmap`, one small trick you'll need to add is adding `inherit.aes=FALSE` inside the `geom_sf()` call.
+
+```{r eval=T, echo=T}
+
+library(ggmap) # need this package
+
+# ggmap is in WGS84, so need to transform data to get the correct centroid point in lat/lon
+counties_dissolve <- counties_dissolve %>% st_transform(crs=4326)
+loc_cent <- counties_dissolve  %>% st_centroid() %>% st_coordinates() 
+
+# set mapRange to the dissolved counties for mapping xlim and ylim
+mapRange1 <- c(range(st_coordinates(counties_dissolve)[,1]),
+               range(st_coordinates(counties_dissolve)[,2]))
+
+# set the center of the map
+location=c(loc_cent[1], loc_cent[2]) 
+
+# set the background map: black and white terrain
+map1 <- get_map(location=location, crop = F,
+             color="bw",
+             maptype="terrain",
+             source="google",
+             zoom=8)
+
+# stamen toner
+map2 <- get_map(location=location, crop = F,
+             maptype="toner",
+             source="stamen",
+             zoom=8)
+
+# water color
+map3 <- get_map(location=location, crop = F, 
+             maptype="watercolor",
+             source="stamen",
+             zoom=7)
+
+# satellite
+map4 <- get_map(location=location,crop = F,
+             maptype="hybrid",
+             source="google",
+             zoom=7)
+
+# make a multiplot with cowplot
+library(cowplot)
+plot_grid(ggmap(map1), ggmap(map2), 
+          ggmap(map3), ggmap(map4), 
+          labels = c("Terrain","Toner","Watercolor","Satellite"),
+          ncol = 2, align = 'v',label_size = 10, label_fontfamily = "Roboto Condensed")
+
+
+# now let's make a ggmap with our data
+sitemap <- ggmap(map1) # start a ggmap... like calling ggplot()
+
+# and let's make our nicemap...remember to use "inherit.aes=FALSE" for the geom_sf layers
+nicemap<-
+  sitemap + 
+  geom_sf(data=rivers_crop, col="blue", alpha=0.8, size=0.5, inherit.aes = FALSE)+
+  geom_sf(data=counties_spec, fill = NA, show.legend = F, color="gray50", lwd=0.4, inherit.aes = FALSE) +
+  geom_sf(data=snw_sf, aes(fill=apr1avg_in), pch=21, alpha=0.9, size=3.5, inherit.aes = FALSE) +
+  coord_sf(crs = 4326, xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
+  scale_fill_viridis_c(option = "A")+
+  labs(x="Longitude (WGS84)", y="Latitude",
+       title="Snow Stations of CA") + 
+  theme_bw(base_family = "Roboto Condensed") # change this to sans if it doesn't plot
+nicemap
+
+```
+
+## `mapview`
+
+A quick and easy way to view our `sf` data in a leaflet map uses a package called `mapview`. Great thing is it's very simple and quick to make an interactive map.
+
+```{r eval=T, echo=T}
+library(mapview)
+
+mapview(snw_sf)
+```
+
+Add additional layers by calling different maps and adding together in ggplot style:
+
+```{r, eval=T, echo=T}
+
+m1 <- mapview(snw_sf, zcol="apr1avg_in", legend=TRUE)
+m2 <- mapview(rivers_crop)
+m3 <- mapview(counties_spec, fill=NA, color="maroon")
+
+m1 + m2 + m3
+
+```
+
+# Summary
+
+Hope this helps at least introduce some of the things you can do with `sf` and maps. There are many more functions available to use, so definitely check out the vignettes and resources.
