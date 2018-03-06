@@ -9,7 +9,7 @@ navbar:
     - text: "Spatial Data"
       icon: fa-map-marker  fa-1x
       menu: 
-        - text: "XY Data"
+        - text: "Point Data"
           href: spatial_XY.html
         - text: "Polyline & Polygons"
           href: spatial_linepoly.html

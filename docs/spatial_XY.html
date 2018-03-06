@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>spatialXY</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,41 +30,69 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.sourceCode {
   overflow-x: visible;
 }
@@ -346,7 +374,7 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="spatial_XY.html">XY Data</a>
+      <a href="spatial_XY.html">Point Data</a>
     </li>
     <li>
       <a href="spatial_linepoly.html">Polyline &amp; Polygons</a>
@@ -429,24 +457,24 @@ div.tocify {
 
 
 <p><br></p>
-<div id="xy-data-with-rgdal-and-sf" class="section level1">
-<h1>XY Data with <code>rgdal</code> and <code>sf</code></h1>
+<div id="point-data-with-rgdal-and-sf" class="section level1">
+<h1>Point Data with <code>rgdal</code> and <code>sf</code></h1>
 <p>There are loads of spatial mapping/plotting packages in R. The main two ways to read in spatial data use the <code>rgdal</code> package, and the <code>sf</code> package. I’m going to show how you can load and plot XY data using either method.</p>
 <p><strong>Let’s load packages first:</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
-  <span class="kw">library</span>(rgdal); <span class="co"># spatial/shp reading</span>
-  <span class="kw">library</span>(readr); <span class="co"># reading/writing files</span>
-  <span class="kw">library</span>(dplyr); <span class="co"># wrangling data/plotting</span>
-  <span class="kw">library</span>(viridis); <span class="co"># nice color palette</span>
-  <span class="kw">library</span>(sf); <span class="co"># newer &quot;simple features&quot; spatial package</span>
-  <span class="kw">library</span>(rvest) <span class="co"># scraping web data</span>
-  <span class="kw">library</span>(maps); <span class="co"># for map functions</span>
-  <span class="kw">library</span>(maptools) <span class="co"># map data</span>
-  }) </code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">suppressPackageStartupMessages</span>({</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">library</span>(rgdal); <span class="co"># spatial/shp reading</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="kw">library</span>(readr); <span class="co"># reading/writing files</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="kw">library</span>(dplyr); <span class="co"># wrangling data/plotting</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="kw">library</span>(viridis); <span class="co"># nice color palette</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">library</span>(sf); <span class="co"># newer &quot;simple features&quot; spatial package</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  <span class="kw">library</span>(rvest) <span class="co"># scraping web data</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="kw">library</span>(maps); <span class="co"># for map functions</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="kw">library</span>(maptools) <span class="co"># map data</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  }) </a></code></pre></div>
 <div id="get-xy-data-ca-hotsprings" class="section level2">
 <h2>Get XY Data: CA Hotsprings</h2>
-<p>The simplest type of data to plot is X/Y points. You might have a <code>.csv</code> lying around with site locations, or even better, a shapefile. For this example, et’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’ve already downloaded the file so you can just read the file link directly into R as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>)</code></pre></div>
+<p>The simplest type of data to plot is X/Y points. You might have a <code>.csv</code> lying around with site locations, or even better, a shapefile. For this example, let’s use this list of <a href="http://www.hotspringsenthusiast.com/California.asp">CA hotsprings</a>. It provides names, <em>Latitude &amp; Longitude</em> and water temperatures in C and F for each hotspring. I’ve already downloaded the file so you can just read the file link directly into R as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">df_locs&lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   X1 = col_character(),
@@ -466,106 +494,98 @@ div.tocify {
 <li>Then in the upper right hand box, hover/scroll around until the table part of the webpage is highlighted. Right click on that line and select “<strong>Copy</strong> &gt; <strong>Copy Xpath</strong>”.</li>
 <li>Read in with the code below!</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rvest)
-
-url &lt;-<span class="st"> &quot;http://www.hotspringsenthusiast.com/California.asp&quot;</span>
-
-df &lt;-<span class="st"> </span>url <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>
-<span class="st">  </span>## NOW THE XPATH WE COPIED!
-<span class="st">  </span><span class="kw">html_nodes</span>(<span class="dt">xpath=</span><span class="st">&#39;/html/body/table&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># use inspect and xpath with chrome</span>
-<span class="st">  </span><span class="kw">html_table</span>()
-
-df_locs &lt;-<span class="st"> </span>df[[<span class="dv">1</span>]] <span class="co"># reads in as a list, so we are just eliminating the list and making this a dataframe</span>
-
-<span class="co"># Great! Let&#39;s add colnames and clean up a bit:</span>
-<span class="kw">dim</span>(df_locs)
-
-<span class="co"># set_names from purrr package is nice for adding col names</span>
-df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(<span class="dt">nm =</span> <span class="kw">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Spring_Name&quot;</span>, <span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>, <span class="st">&quot;Area&quot;</span>, <span class="st">&quot;USGS_Quad&quot;</span>))
-
-<span class="co"># Make the temp data numeric</span>
-df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)
-
-<span class="co"># save as a CSV!</span>
-<span class="co"># write_csv(df_locs, path = &quot;data/hotsprings_CA.csv&quot;)</span></code></pre></div>
-<p><img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="500"/></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(rvest)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">url &lt;-<span class="st"> &quot;http://www.hotspringsenthusiast.com/California.asp&quot;</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">df &lt;-<span class="st"> </span>url <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">read_html</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="st">  </span>## NOW THE XPATH WE COPIED!</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="st">  </span><span class="kw">html_nodes</span>(<span class="dt">xpath=</span><span class="st">&#39;/html/body/table&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># use inspect and xpath with chrome</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="st">  </span><span class="kw">html_table</span>()</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">df_locs &lt;-<span class="st"> </span>df[[<span class="dv">1</span>]] <span class="co"># reads in as a list, so we are just eliminating the list and making this a dataframe</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co"># Great! Let&#39;s add colnames and clean up a bit:</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="kw">dim</span>(df_locs)</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co"># set_names from purrr package is nice for adding col names</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18">df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(<span class="dt">nm =</span> <span class="kw">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Spring_Name&quot;</span>, <span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>, <span class="st">&quot;Area&quot;</span>, <span class="st">&quot;USGS_Quad&quot;</span>))</a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co"># Make the temp data numeric</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)</a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co"># save as a CSV!</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co"># write_csv(df_locs, path = &quot;data/hotsprings_CA.csv&quot;)</span></a></code></pre></div>
+<p><img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="300"/></p>
 </div>
 <div id="make-xy-spatial-rgdal" class="section level3">
 <h3>Make XY “Spatial”: <code>rgdal</code></h3>
 <p>Now we have some data, let’s show how to read it in as spatial data using the <code>rgdal</code> pipeline. This requires creating a <code>SpatialPointsDataFrame</code>. We’ll use the extension <code>sp</code> for data of this type.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read in data</span>
-df_locs &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>) <span class="co"># or as file:  data/hotsprings_CA.csv</span></code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   X1 = col_character(),
-##   X2 = col_double(),
-##   X3 = col_double(),
-##   X4 = col_character(),
-##   X5 = col_character(),
-##   X6 = col_character(),
-##   X7 = col_character(),
-##   X8 = col_character()
-## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># rename</span>
-df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(<span class="dt">nm =</span> <span class="kw">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Spring_Name&quot;</span>, <span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>, <span class="st">&quot;Area&quot;</span>, <span class="st">&quot;USGS_Quad&quot;</span>))
-
-<span class="co"># Make the temp data numeric</span>
-df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)</code></pre></div>
-<pre><code>## Warning in evalq(as.numeric(Temp_C), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<pre><code>## Warning in evalq(as.numeric(Temp_F), &lt;environment&gt;): NAs introduced by
-## coercion</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(df_locs) <span class="co"># wait...what&#39;s up with Lon?</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># read in data</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">df_locs &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv&quot;</span>) <span class="co"># or as file:  data/hotsprings_CA.csv</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># rename</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(<span class="dt">nm =</span> <span class="kw">c</span>(<span class="st">&quot;State&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Spring_Name&quot;</span>, <span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>, <span class="st">&quot;Area&quot;</span>, <span class="st">&quot;USGS_Quad&quot;</span>))</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co"># Make the temp data numeric</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">df_locs &lt;-<span class="st"> </span>df_locs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_at</span>(<span class="dt">.vars =</span> <span class="kw">c</span>(<span class="st">&quot;Temp_C&quot;</span>, <span class="st">&quot;Temp_F&quot;</span>), <span class="dt">.funs =</span> as.numeric)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw">head</span>(df_locs) <span class="co"># wait...what&#39;s up with Lon?</span></a></code></pre></div>
 <pre><code>## # A tibble: 6 x 8
-##   State    Lat     Lon                               Spring_Name Temp_C
-##   &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;                                     &lt;chr&gt;  &lt;dbl&gt;
-## 1    CA 38.802 122.810                   &quot;THE \r\n      GEYSERS&quot;    214
-## 2    CA 38.767 122.748                &quot;LITTLE \r\n      GEYSERS&quot;    210
-## 3    CA 41.534 120.078 &quot;HOT \r\n      SPRINGS (SURPRISE VALLEY)&quot;    208
-## 4    CA 36.045 117.769              &quot;COSO \r\n      HOT SPRINGS&quot;    207
-## 5    CA 41.670 120.206         &quot;LAKE \r\n      CITY HOT SPRINGS&quot;    207
-## 6    CA 36.036 117.802                &quot;DEVILS \r\n      KITCHEN&quot;    207
-## # ... with 3 more variables: Temp_F &lt;dbl&gt;, Area &lt;chr&gt;, USGS_Quad &lt;chr&gt;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_locs<span class="op">$</span>Lon &lt;-<span class="st"> </span>df_locs<span class="op">$</span>Lon <span class="op">*</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span>
-
-<span class="co"># make CDEC data sf object (spatial): </span>
-df_locs_sp  &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(df_locs[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)],df_locs[,<span class="op">-</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)]) 
-
-<span class="co"># no projection:</span>
-<span class="kw">proj4string</span>(df_locs_sp) <span class="co"># NA</span></code></pre></div>
+##   State   Lat   Lon Spring_Name         Temp_C Temp_F Area    USGS_Quad   
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       
+## 1 CA     38.8  123. &quot;THE \r\n      GEY…   214.   101. SANTA … THE GEYSERS…
+## 2 CA     38.8  123. &quot;LITTLE \r\n      …   210.    99. SANTA … (WHISPERING…
+## 3 CA     41.5  120. &quot;HOT \r\n      SPR…   208.    98. ALTURAS CEDARVILLE …
+## 4 CA     36.0  118. &quot;COSO \r\n      HO…   207.    97. DEATH … HAIWEE RESE…
+## 5 CA     41.7  120. &quot;LAKE \r\n      CI…   207.    97. ALTURAS CEDARVILLE …
+## 6 CA     36.0  118. &quot;DEVILS \r\n      …   207.    97. DEATH … HAIWEE RESE…</code></pre>
+<div id="a-note-on-latlongs" class="section level4">
+<h4>A note on Lat/Longs</h4>
+<p>For data from the North American continent, keep an eye on your lat/longs. A common snafu that can occur is the longitude may remain positive, which will plot your point somewhere in the Indian Ocean. Make sure all your longitudes are negative (if in the US and using lat/longs).</p>
+<p>Here we need to fix this column, and then make our data “<em>spatial</em>” with the <code>SpatialPointsDataFrame()</code> function. Note we also set the projection based for our data.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">df_locs<span class="op">$</span>Lon &lt;-<span class="st"> </span>df_locs<span class="op">$</span>Lon <span class="op">*</span><span class="st"> </span><span class="dv">-1</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co"># make spatial Dataframe object: </span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">df_locs_sp  &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(df_locs[,<span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)],df_locs[,<span class="op">-</span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)]) </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co"># no projection:</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="kw">proj4string</span>(df_locs_sp) <span class="co"># NA</span></a></code></pre></div>
 <pre><code>## [1] NA</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set projections</span>
-utms &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:32610&quot;</span>) ## more detailed def using the EPSG code
-utms <span class="co"># more detail</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># set projections</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">utms &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:32610&quot;</span>) ## more detailed def using the EPSG code</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">utms <span class="co"># more detail</span></a></code></pre></div>
 <pre><code>## CRS arguments:
 ##  +init=epsg:32610 +proj=utm +zone=10 +datum=WGS84 +units=m +no_defs
 ## +ellps=WGS84 +towgs84=0,0,0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lats84&lt;-<span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:4326&quot;</span>) <span class="co"># set the default for lat/longs</span>
-lats84</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">lats84&lt;-<span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:4326&quot;</span>) <span class="co"># set the default for lat/longs</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">lats84</a></code></pre></div>
 <pre><code>## CRS arguments:
 ##  +init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
 ## +towgs84=0,0,0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Project our data</span>
-<span class="kw">proj4string</span>(df_locs_sp)&lt;-lats84
-<span class="kw">proj4string</span>(df_locs_sp) <span class="co"># looks like it matches!</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># Project our data</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">proj4string</span>(df_locs_sp)&lt;-lats84</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">proj4string</span>(df_locs_sp) <span class="co"># looks like it matches!</span></a></code></pre></div>
 <pre><code>## [1] &quot;+init=epsg:4326 +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># if you want to reproject (say to UTM):</span>
-df_locs_sp_utm&lt;-<span class="kw">spTransform</span>(df_locs_sp, utms)
-<span class="kw">proj4string</span>(df_locs_sp_utm) <span class="co"># double check data to make sure it has CRS</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># if you want to reproject (say to UTM):</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">df_locs_sp_utm&lt;-<span class="kw">spTransform</span>(df_locs_sp, utms)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">proj4string</span>(df_locs_sp_utm) <span class="co"># double check data to make sure it has CRS</span></a></code></pre></div>
 <pre><code>## [1] &quot;+init=epsg:32610 +proj=utm +zone=10 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0&quot;</code></pre>
+</div>
 </div>
 <div id="make-xy-spatial-sf" class="section level3">
 <h3>Make XY “Spatial”: <code>sf</code></h3>
-<p>Here’s how to do the same thing using the <code>sf</code> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># make data sf object: </span>
-df_locs_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df_locs, 
-<span class="co">#                    coords = c(&quot;Lon&quot;, &quot;Lat&quot;), # can use numbers here too</span>
-                    <span class="dt">coords =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="co"># can use numbers here too</span>
-                    <span class="dt">remove =</span> F, <span class="co"># don&#39;t remove these lat/lon cols from df</span>
-                    <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="co"># add projection (this is WGS84)</span></code></pre></div>
-<p>Ok! So we’ve pulled in a list of XY locations. These could have come from field work, a GPS device, whatever. We projected this dataset into <strong><code>WGS84</code></strong> which is fairly universal (and easily plotted in things like <em>googlemaps, leaflet, Google Earth, etc.</em>).</p>
+<p>Great, now let’s see how to do the same thing using the <code>sf</code> package. Notice the amount of code we wrote above…and below.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># make data sf object: </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">df_locs_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df_locs, </a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#                    coords = c(&quot;Lon&quot;, &quot;Lat&quot;), # can use numbers here too</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">                    <span class="dt">coords =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="co"># can use numbers here too</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">                    <span class="dt">remove =</span> F, <span class="co"># don&#39;t remove these lat/lon cols from df</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">                    <span class="dt">crs =</span> <span class="dv">4326</span>) <span class="co"># add projection (this is WGS84)</span></a></code></pre></div>
+<p>That’s it! We’re done!</p>
+<p>Ok! So we’ve pulled in a list of XY locations. These could have come from field work, a GPS device, whatever. We projected this dataset into <strong><code>WGS84</code></strong> which is fairly universal (and easily plotted in things like <em>googlemaps, leaflet, Google Earth, etc.</em>). On to plotting.</p>
 </div>
 </div>
 <div id="plotting-xy-data" class="section level2">
@@ -573,80 +593,88 @@ df_locs_sf &lt;-<span class="st"> </span><span class="kw">st_as_sf</span>(df_loc
 <p>Let’s plot the data. I’ll show how to do the same map using both <code>sf</code> and <code>rgdal</code>. Let’s introduce <code>map</code> and <code>maptools</code> packages, which provide some nice functionality.</p>
 <div id="plotting-with-spatial-rgdal-data" class="section level3">
 <h3>Plotting with <code>Spatial</code> (<code>rgdal</code>) Data</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># need to have maps and maptools loaded here</span>
-
-<span class="co"># add States</span>
-<span class="kw">map</span>(<span class="st">&quot;state&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>))
-<span class="kw">map.axes</span>()
-<span class="co"># add counties</span>
-<span class="kw">map</span>(<span class="st">&quot;county&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>),<span class="dt">boundary=</span><span class="ot">FALSE</span>, <span class="dt">lty=</span><span class="dv">3</span>, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;gray70&quot;</span>)
-<span class="co"># add our hotspring point data from earlier: sp version</span>
-<span class="kw">points</span>(df_locs_sp, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">bg=</span><span class="st">&quot;skyblue&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># need to have maps and maptools loaded here</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">library</span>(maps)</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">library</span>(maptools)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co"># add States</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="kw">map</span>(<span class="st">&quot;state&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>)) <span class="co"># get a CA map</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw">map.axes</span>() <span class="co"># add axes</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co"># add counties</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="kw">map</span>(<span class="st">&quot;county&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>),<span class="dt">boundary=</span><span class="ot">FALSE</span>, <span class="dt">lty=</span><span class="dv">3</span>, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;gray70&quot;</span>)</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co"># add our hotspring point data from earlier: sp version</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="kw">points</span>(df_locs_sp, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">bg=</span><span class="st">&quot;skyblue&quot;</span>)</a></code></pre></div>
 <p><img src="spatial_XY_files/figure-html/mapXY_sp-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Cool! Let&#39;s zoom in a bit and add a legend</span>
-<span class="kw">map</span>(<span class="st">&quot;state&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">121</span>,<span class="op">-</span><span class="fl">119.2</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">38</span>,<span class="dv">40</span>))
-<span class="kw">map.axes</span>()
-<span class="kw">map</span>(<span class="st">&quot;county&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>),<span class="dt">boundary=</span><span class="ot">FALSE</span>, <span class="dt">lty=</span><span class="dv">3</span>, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;gray70&quot;</span>,
-    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">121</span>,<span class="op">-</span><span class="fl">119.2</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">38</span>,<span class="dv">40</span>))
-<span class="kw">points</span>(df_locs_sp, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">bg=</span><span class="st">&quot;skyblue&quot;</span>)
-
-<span class="co"># add labels (using trial and error for placement)</span>
-<span class="kw">text</span>(df_locs_sp, <span class="dt">labels=</span><span class="kw">as.character</span>(df_locs_sp<span class="op">@</span>data<span class="op">$</span>Spring_Name), <span class="dt">col=</span><span class="st">&quot;gray20&quot;</span>,
-     <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">font=</span><span class="dv">2</span>, <span class="dt">offset=</span><span class="fl">0.5</span>, <span class="dt">adj=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))
-
-<span class="co"># add a plot legend</span>
-<span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;gray80&quot;</span>, <span class="dt">box.lwd =</span> <span class="fl">1.5</span>, 
-       <span class="dt">box.col =</span> <span class="st">&quot;gray80&quot;</span>,
-       <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Hot Springs&quot;</span>, <span class="st">&quot;Counties&quot;</span>),
-       <span class="dt">title=</span><span class="st">&quot;Study Map&quot;</span>, <span class="dt">bty=</span><span class="st">&quot;o&quot;</span>, <span class="dt">inset=</span><span class="fl">0.05</span>,
-       <span class="dt">lty=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">3</span>), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">21</span>, <span class="ot">NA</span>), <span class="dt">cex=</span><span class="fl">0.8</span>,
-       <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;gray70&quot;</span>), <span class="dt">pt.bg=</span><span class="kw">c</span>(<span class="st">&quot;skyblue&quot;</span>, <span class="ot">NA</span>))</code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># Cool! Let&#39;s zoom in a bit and add a legend</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">map</span>(<span class="st">&quot;state&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">121</span>,<span class="op">-</span><span class="fl">119.2</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">38</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">map.axes</span>()</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">map</span>(<span class="st">&quot;county&quot;</span>,<span class="dt">region=</span><span class="kw">c</span>(<span class="st">&#39;CA&#39;</span>),<span class="dt">boundary=</span><span class="ot">FALSE</span>, <span class="dt">lty=</span><span class="dv">3</span>, <span class="dt">add=</span>T, <span class="dt">col=</span><span class="st">&quot;gray70&quot;</span>,</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">121</span>,<span class="op">-</span><span class="fl">119.2</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">38</span>,<span class="dv">40</span>))</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="kw">points</span>(df_locs_sp, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">bg=</span><span class="st">&quot;skyblue&quot;</span>)</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="co"># add labels (using trial and error for placement)</span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="kw">text</span>(df_locs_sp, <span class="dt">labels=</span><span class="kw">as.character</span>(df_locs_sp<span class="op">@</span>data<span class="op">$</span>Spring_Name), <span class="dt">col=</span><span class="st">&quot;gray20&quot;</span>,</a>
+<a class="sourceLine" id="cb19-10" data-line-number="10">     <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">font=</span><span class="dv">2</span>, <span class="dt">offset=</span><span class="fl">0.5</span>, <span class="dt">adj=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co"># add a plot legend</span></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>, <span class="dt">border =</span> <span class="st">&quot;gray80&quot;</span>, <span class="dt">box.lwd =</span> <span class="fl">1.5</span>, </a>
+<a class="sourceLine" id="cb19-14" data-line-number="14">       <span class="dt">box.col =</span> <span class="st">&quot;gray80&quot;</span>,</a>
+<a class="sourceLine" id="cb19-15" data-line-number="15">       <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;Hot Springs&quot;</span>, <span class="st">&quot;Counties&quot;</span>),</a>
+<a class="sourceLine" id="cb19-16" data-line-number="16">       <span class="dt">title=</span><span class="st">&quot;Study Map&quot;</span>, <span class="dt">bty=</span><span class="st">&quot;o&quot;</span>, <span class="dt">inset=</span><span class="fl">0.05</span>,</a>
+<a class="sourceLine" id="cb19-17" data-line-number="17">       <span class="dt">lty=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="dv">3</span>), <span class="dt">pch=</span><span class="kw">c</span>(<span class="dv">21</span>, <span class="ot">NA</span>), <span class="dt">cex=</span><span class="fl">0.8</span>,</a>
+<a class="sourceLine" id="cb19-18" data-line-number="18">       <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;gray70&quot;</span>), <span class="dt">pt.bg=</span><span class="kw">c</span>(<span class="st">&quot;skyblue&quot;</span>, <span class="ot">NA</span>))</a></code></pre></div>
 <p><img src="spatial_XY_files/figure-html/mapXY_sp-2.png" width="672" /></p>
 </div>
 <div id="plotting-with-sf-data" class="section level3">
 <h3>Plotting with <code>sf</code> Data</h3>
-<p>Can we do the same thing with <code>sf</code> data? Nope! You’ll get this error:</p>
+<p>Can we do the same thing with <code>sf</code> data? Nope! Not in the same way. You’ll get this error:</p>
 <pre><code>Error in data.matrix(x) : 
   (list) object cannot be coerced to type &#39;double&#39;</code></pre>
-<p>Baseplotting functions work with <code>sf</code>, but be aware it will plot a facet or map for column of data in your dataframe. Avoid that by specifying <code>st_coordinates()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the simplest plot with sf data: </span>
-<span class="kw">plot</span>(df_locs_sf, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>) <span class="co">#YIKES</span></code></pre></div>
+<p>Baseplotting functions work with <code>sf</code>, but be aware, using <code>plot</code> will default to plotting a facet or map for every column of data in your dataframe. Avoid that by specifying <code>st_coordinates()</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># the simplest plot with sf data: </span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">plot</span>(df_locs_sf, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>) <span class="co">#YIKES</span></a></code></pre></div>
 <p><img src="spatial_XY_files/figure-html/mapXY_sf1-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># this is better</span>
-<span class="kw">plot</span>(<span class="kw">st_coordinates</span>(df_locs_sf), <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)
-graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Map of CA Hot Springs&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># this is better</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">plot</span>(<span class="kw">st_coordinates</span>(df_locs_sf), <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">adjustcolor</span>(<span class="st">&quot;maroon&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>), <span class="dt">cex=</span><span class="fl">1.5</span>)</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">graphics<span class="op">::</span><span class="kw">title</span>(<span class="st">&quot;Map of CA Hot Springs&quot;</span>)</a></code></pre></div>
 <p><img src="spatial_XY_files/figure-html/mapXY_sf1-2.png" width="672" /></p>
 </div>
 <div id="plotting-with-ggplot-and-ggmap" class="section level3">
 <h3>Plotting with <code>ggplot</code> and <code>ggmap</code></h3>
 <p>Alternatively, we can use <code>ggplot2</code> instead. This is where <code>sf</code> objects are really nice. They fit well within the ggplot framework because they are simply dataframes with a spatial list-column. You can plot XY data as a regular layer, or you can use the <code>geom_sf</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fancier ggplot w google background plot:</span>
-
-<span class="kw">library</span>(ggmap) <span class="co"># need this package</span>
-location=<span class="kw">c</span>(<span class="op">-</span><span class="fl">119.7</span>,<span class="fl">38.7</span>) <span class="co"># set the center of the map</span>
-
-<span class="co"># set the background map up</span>
-map1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location, <span class="dt">crop =</span> F,
-             <span class="dt">color=</span><span class="st">&quot;bw&quot;</span>,
-             <span class="dt">maptype=</span><span class="st">&quot;satellite&quot;</span>,
-             <span class="dt">source=</span><span class="st">&quot;google&quot;</span>,
-             <span class="dt">zoom=</span><span class="dv">8</span>)</code></pre></div>
+<p>The only caveat here is we currently (as of 2018-03-05) need the development version of <code>ggplot2</code>. To install, use:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co">#install.packages(&quot;devtools&quot;)</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;tidyverse/ggplot2&quot;</span>)</a></code></pre></div>
+<p>Once we have the dev version of <code>ggplot2</code>, we can make a fancier plot.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># fancier ggplot w google background plot:</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">library</span>(ggmap) <span class="co"># need this package</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">location=<span class="kw">c</span>(<span class="op">-</span><span class="fl">119.7</span>,<span class="fl">38.7</span>) <span class="co"># set the center of the map</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co"># set the background map up</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7">map1 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location=</span>location, <span class="dt">crop =</span> F,</a>
+<a class="sourceLine" id="cb24-8" data-line-number="8">             <span class="dt">color=</span><span class="st">&quot;bw&quot;</span>,</a>
+<a class="sourceLine" id="cb24-9" data-line-number="9">             <span class="dt">maptype=</span><span class="st">&quot;satellite&quot;</span>,</a>
+<a class="sourceLine" id="cb24-10" data-line-number="10">             <span class="dt">source=</span><span class="st">&quot;google&quot;</span>,</a>
+<a class="sourceLine" id="cb24-11" data-line-number="11">             <span class="dt">zoom=</span><span class="dv">8</span>)</a></code></pre></div>
 <pre><code>## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=38.7,-119.7&amp;zoom=8&amp;size=640x640&amp;scale=2&amp;maptype=satellite&amp;language=en-EN&amp;sensor=false</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sitemap &lt;-<span class="st"> </span><span class="kw">ggmap</span>(map1) <span class="co"># start a ggmap... like calling ggplot()</span>
-
-<span class="co"># and let&#39;s make our nicemap</span>
-nicemap&lt;-
-<span class="st">  </span>sitemap <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df_locs_sf, <span class="kw">aes</span>(<span class="dt">x=</span>Lon, <span class="dt">y=</span>Lat, <span class="dt">fill=</span>Temp_F), <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>, <span class="dt">size=</span><span class="dv">4</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;A&quot;</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,
-       <span class="dt">title=</span><span class="st">&quot;Hot Springs in California&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="co"># change this to sans if it doesn&#39;t plot</span>
-nicemap</code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">sitemap &lt;-<span class="st"> </span><span class="kw">ggmap</span>(map1) <span class="co"># start a ggmap... like calling ggplot()</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co"># and let&#39;s make our nicemap</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4">nicemap&lt;-</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="st">  </span>sitemap <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>df_locs_sf, <span class="kw">aes</span>(<span class="dt">x=</span>Lon, <span class="dt">y=</span>Lat, <span class="dt">fill=</span>Temp_F), <span class="dt">pch=</span><span class="dv">21</span>, <span class="dt">alpha=</span><span class="fl">0.7</span>, <span class="dt">size=</span><span class="dv">4</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">option =</span> <span class="st">&quot;A&quot;</span>)<span class="op">+</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Longitude (WGS84)&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Latitude&quot;</span>,</a>
+<a class="sourceLine" id="cb26-9" data-line-number="9">       <span class="dt">title=</span><span class="st">&quot;Hot Springs in California&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="st">  </span><span class="kw">theme_bw</span>(<span class="dt">base_family =</span> <span class="st">&quot;Roboto Condensed&quot;</span>) <span class="co"># change this to sans if it doesn&#39;t plot</span></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11">nicemap</a></code></pre></div>
 <pre><code>## Warning: Removed 255 rows containing missing values (geom_point).</code></pre>
 <p><img src="spatial_XY_files/figure-html/mapXY_sf2-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># To save plot</span>
-<span class="co"># ggsave(filename = &quot;./figs/site_map_ggplot.png&quot;, width = 8, height = 6, units = &quot;in&quot;, dpi = 300)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># To save plot</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co"># ggsave(filename = &quot;./figs/site_map_ggplot.png&quot;, width = 8, height = 6, units = &quot;in&quot;, dpi = 300)</span></a></code></pre></div>
 </div>
 </div>
 </div>

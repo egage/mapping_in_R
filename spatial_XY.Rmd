@@ -1,10 +1,10 @@
 ---
-title: ""
+pagetitle: "spatialXY"
 ---
 
 <br>
 
-# XY Data with `rgdal` and `sf`
+# Point Data with `rgdal` and `sf`
 
 There are loads of spatial mapping/plotting packages in R. The main two ways to read in spatial data use the `rgdal` package, and the `sf` package. I'm going to show how you can load and plot XY data using either method.
 
@@ -26,7 +26,7 @@ suppressPackageStartupMessages({
 
 ## Get XY Data: CA Hotsprings
 
-The simplest type of data to plot is X/Y points. You might have a `.csv` lying around with site locations, or even better, a shapefile. For this example, et's use this list of [CA hotsprings](http://www.hotspringsenthusiast.com/California.asp). It provides names, *Latitude & Longitude* and water temperatures in C and F for each hotspring. I've already downloaded the file so you can just read the file link directly into R as follows:
+The simplest type of data to plot is X/Y points. You might have a `.csv` lying around with site locations, or even better, a shapefile. For this example, let's use this list of [CA hotsprings](http://www.hotspringsenthusiast.com/California.asp). It provides names, *Latitude & Longitude* and water temperatures in C and F for each hotspring. I've already downloaded the file so you can just read the file link directly into R as follows:
 
 ```{r getHotspring_csv, echo=T, eval=T}
 
@@ -71,13 +71,13 @@ df_locs <- df_locs %>% mutate_at(.vars = c("Temp_C", "Temp_F"), .funs = as.numer
 
 ```
 
-<img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="500"/>
+<img src="http://www.reactiongifs.com/r/2013/06/Sean_connery_raction.gif" width="300"/>
 
 ### Make XY "Spatial": `rgdal`
 
 Now we have some data, let's show how to read it in as spatial data using the `rgdal` pipeline. This requires creating a `SpatialPointsDataFrame`. We'll use the extension `sp` for data of this type.
 
-```{r makeXYspatial_rgdal, echo=T, eval=T}
+```{r makeXYspatial_rgdal, echo=T, eval=T, message=FALSE, warning=F}
 
 # read in data
 df_locs <- read_csv("https://raw.githubusercontent.com/ryanpeek/mapping_in_R/master/data/hotsprings_CA.csv") # or as file:  data/hotsprings_CA.csv
@@ -89,10 +89,19 @@ df_locs <- df_locs %>% set_names(nm = c("State", "Lat", "Lon", "Spring_Name", "T
 df_locs <- df_locs %>% mutate_at(.vars = c("Temp_C", "Temp_F"), .funs = as.numeric)
 
 head(df_locs) # wait...what's up with Lon?
+```
+
+#### A note on Lat/Longs
+
+For data from the North American continent, keep an eye on your lat/longs. A common snafu that can occur is the longitude may remain positive, which will plot your point somewhere in the Indian Ocean. Make sure all your longitudes are negative (if in the US and using lat/longs).
+
+Here we need to fix this column, and then make our data "*spatial*" with the `SpatialPointsDataFrame()` function. Note we also set the projection based for our data.
+
+```{r latlongSP, echo=T, eval=T}
 
 df_locs$Lon <- df_locs$Lon * -1
 
-# make CDEC data sf object (spatial): 
+# make spatial Dataframe object: 
 df_locs_sp  <- SpatialPointsDataFrame(df_locs[,c(3,2)],df_locs[,-c(3,2)]) 
 
 # no projection:
@@ -116,7 +125,7 @@ proj4string(df_locs_sp_utm) # double check data to make sure it has CRS
 
 ### Make XY "Spatial": `sf`
 
-Here's how to do the same thing using the `sf` package.
+Great, now let's see how to do the same thing using the `sf` package. Notice the amount of code we wrote above...and below.
 
 ```{r makeXYspatial_sf, echo=T, eval=T}
 
@@ -129,8 +138,9 @@ df_locs_sf <- st_as_sf(df_locs,
 
 ```
 
+That's it! We're done! 
 
-Ok! So we've pulled in a list of XY locations. These could have come from field work, a GPS device, whatever. We projected this dataset into **`WGS84`** which is fairly universal (and easily plotted in things like *googlemaps, leaflet, Google Earth, etc.*).
+Ok! So we've pulled in a list of XY locations. These could have come from field work, a GPS device, whatever. We projected this dataset into **`WGS84`** which is fairly universal (and easily plotted in things like *googlemaps, leaflet, Google Earth, etc.*). On to plotting.
 
 ## Plotting XY Data
 
@@ -140,12 +150,16 @@ Let's plot the data. I'll show how to do the same map using both `sf` and `rgdal
 
 ```{r mapXY_sp}
 # need to have maps and maptools loaded here
+library(maps)
+library(maptools)
 
 # add States
-map("state",region=c('CA'))
-map.axes()
+map("state",region=c('CA')) # get a CA map
+map.axes() # add axes
+
 # add counties
 map("county",region=c('CA'),boundary=FALSE, lty=3, add=T, col="gray70")
+
 # add our hotspring point data from earlier: sp version
 points(df_locs_sp, cex=0.8, pch=21, bg="skyblue")
 
@@ -172,13 +186,14 @@ legend("topright", border = "gray80", box.lwd = 1.5,
 
 ### Plotting with `sf` Data
 
-Can we do the same thing with `sf` data? Nope! You'll get this error:
+Can we do the same thing with `sf` data? Nope! Not in the same way. You'll get this error:
 
 ```
 Error in data.matrix(x) : 
   (list) object cannot be coerced to type 'double'
 ```
-Baseplotting functions work with `sf`, but be aware it will plot a facet or map for column of data in your dataframe. Avoid that by specifying `st_coordinates()`.
+
+Baseplotting functions work with `sf`, but be aware, using `plot` will default to plotting a facet or map for every column of data in your dataframe. Avoid that by specifying `st_coordinates()`.
 
 ```{r mapXY_sf1, eval=T, echo=T}
 
@@ -195,9 +210,19 @@ graphics::title("Map of CA Hot Springs")
 
 Alternatively, we can use `ggplot2` instead. This is where `sf` objects are really nice. They fit well within the ggplot framework because they are simply dataframes with a spatial list-column. You can plot XY data as a regular layer, or you can use the `geom_sf` function. 
 
+The only caveat here is we currently (as of `r Sys.Date()`) need the development version of `ggplot2`. To install, use:
+
+```{r, eval=F, echo=T}
+#install.packages("devtools")
+devtools::install_github("tidyverse/ggplot2")
+
+```
+
+Once we have the dev version of `ggplot2`, we can make a fancier plot.
+
 ```{r mapXY_sf2, eval=T, echo=T}
 # fancier ggplot w google background plot:
-
+library(ggplot2)
 library(ggmap) # need this package
 location=c(-119.7,38.7) # set the center of the map
 

@@ -1,10 +1,12 @@
 ---
-title: "Mapmaking"
+pagetitle: "Mapmaking"
 ---
 
 <br>
 
 ## All Maps are Not Created Equally
+
+Cartography is an amazing field, and maps can encompass art, science, fiction and beyond. To get a sense of the range of what a "map" may contain, check out this amazing array of maps in this [**Cool Cartography**](https://www.theguardian.com/travel/gallery/2015/sep/10/cool-cartography-the-art-of-mapmaking) article!
 
 <br>
 
@@ -14,7 +16,7 @@ title: "Mapmaking"
 
 <br>
 
-While there many ways to make a map, ultimately it would seem there should only be one way to interpret a map. A map cut through confusion and clarify where things are in space (or time). If a map is effective, a reader shouldn't need too much time to observe the information the map is trying to portray. 
+While there many ways to make a map, ultimately it would seem for science communication, there should only be one story to interpret. A map should cut through confusion and clarify where things are in space (or time). If a map is effective, a reader shouldn't need too much time to absorb the information the map is trying to portray. 
 
 Maps can be very effective **and** beautiful! They do not need to be one or the other. Good visualizations often simplify to the pieces (landscapes, points of interest, temporal change) of interest, and remove any other distractions. 
 

@@ -1,5 +1,5 @@
 ---
-title: ""
+pagetitle: "index"
 date: "Updated: `r format(Sys.Date())`"
 ---
 
@@ -20,5 +20,5 @@ Computer literacy is now essential in all aspects of science. Data management sk
 
 ## Goals
 
-The good news (and bad news) is there are many tools & packages available to use for spatial analysis and mapping in R. It is probably impossible to introduce everything, but the goal of this tutorial is to show a few different ways to get spatial data into R, and visualize it. In addition, the *Resources* tab provides links to a smattering of tutorials, background info, vignettes, etc. Check it out!
+The good news (and bad news) is there are many tools & packages available to use for spatial analysis and mapping in R. It is probably impossible to introduce everything, but the goal of this tutorial is to show a few different ways to get spatial data into R, and visualize it. In addition, the [*Resources*](resources.html) tab provides links to a smattering of tutorials, background info, vignettes, etc. Check it out!
 

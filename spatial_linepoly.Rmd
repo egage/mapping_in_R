@@ -1,5 +1,5 @@
 ---
-title: ""
+pagetitle: "spatiallinepoly"
 ---
 
 <br>
@@ -196,9 +196,24 @@ Ok! Not bad. What can we improve?
 
 ### `ggplot2` and `sf`
 
-Mapping with ggplot2 brings some extra things we can fiddle with. Since these data are all data.frames (`sf` features), we can use the `geom_sf` function in the most recent version of `ggplot2`. I'm showing what happens by limiting the map range, vs. without the `coord_sf` call.
+We can use `ggplot2` to plot our `sf` data, but currently it requires the development version of `ggplot2` (after version 2.2.1) . To install you can use the following code:
+
+```{r install_devggplot2, eval=F, echo=T}
+
+install.packages("devtools")
+devtools::install_github("tidyverse/ggplot2")
+
+```
+
+Mapping with `ggplot2` brings some extra things we can fiddle with. Since these data are all data.frames (`sf` features), we can use the `geom_sf` function in the most recent dev version of `ggplot2`. I'm showing what happens by limiting the map range, vs. without the `coord_sf` call.
 
 ```{r ggplot_map1}
+
+# quick test and load of ggplot2
+library(ggplot2)
+if (utils::packageVersion("ggplot2") > "2.2.1")
+  ggplot() + geom_sf(data = CA)
+
 
 # not cropped
 ggplot() + 
@@ -215,7 +230,8 @@ ggplot() +
   geom_label_repel(data=counties_spec, aes(x=lon, y=lat, label=name)) +
   coord_sf(xlim = mapRange1[c(1:2)], ylim = mapRange1[c(3:4)]) +
   theme_bw(base_family = "Roboto Condensed") + # change to "sans" if this font not available
-  labs(title="Selected CA Counties and Riverlines")
+  labs(title="Selected CA Counties and Riverlines")+
+  theme(panel.grid.major = element_line(color = "gray80", linetype = 1)) # change grid
 
 ```
 
